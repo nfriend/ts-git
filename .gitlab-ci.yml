@@ -7,8 +7,10 @@ pages:
   stage: deploy
   script:
     - npm run build
+    - rm -rf public
+    - cp -r dist public
   artifacts:
     paths:
-      - dist
+      - public
   only:
     - master
