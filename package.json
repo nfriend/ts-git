@@ -1,9 +1,10 @@
 {
   "name": "ts-git",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "A naïve implementation of git, written in TypeScript. Built to help me understand how git works under the hood.",
   "scripts": {
-    "build": "cp -r src public"
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
   },
   "repository": {
     "type": "git",
@@ -12,12 +13,30 @@
   "keywords": [
     "git",
     "typescript",
-    "javascript"
+    "javascript",
+    "vue"
   ],
   "author": "Nathan Friend",
   "license": "MIT",
   "bugs": {
     "url": "https://gitlab.com/nfriend/ts-git/issues"
   },
-  "homepage": "https://gitlab.com/nfriend/ts-git#readme"
+  "homepage": "https://gitlab.com/nfriend/ts-git#readme",
+  "dependencies": {
+    "core-js": "^2.6.5",
+    "vue": "^2.6.6",
+    "vue-class-component": "^6.0.0",
+    "vue-property-decorator": "^8.0.0",
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.1"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.5.0",
+    "@vue/cli-plugin-typescript": "^3.5.0",
+    "@vue/cli-service": "^3.5.0",
+    "node-sass": "^4.9.0",
+    "sass-loader": "^7.1.0",
+    "typescript": "^3.2.1",
+    "vue-template-compiler": "^2.5.21"
+  }
 }
