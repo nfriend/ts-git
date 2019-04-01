@@ -6,9 +6,9 @@ before_script:
 pages:
   stage: deploy
   script:
+    - cd demo-app
     - npm run build
-    - rm -rf public
-    - cp -r dist public
+    - cp -r dist ../public
   artifacts:
     paths:
       - public

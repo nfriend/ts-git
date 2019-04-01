@@ -4,36 +4,26 @@
 
 A naïve implementation of [git](https://git-scm.com/), written in [TypeScript](https://www.typescriptlang.org/): http://ts-git.nathanfriend.io. Built to help me understand how git works under the hood.
 
-## Project setup
+This repo contains the source for both the [`ts-git` library](./lib) and the [`ts-git` demo app](./demo-app).
 
-```
-npm install
-```
+## Installation
 
-### Compiles and hot-reloads for development
+`npm install @nathanfriend/ts-git --save`
 
-```
-npm run serve
-```
+## Usage
 
-### Compiles and minifies for production
+The `ts-git` library can be used in two ways: as an ES6 JavaScript module or as a command line utility.
 
-```
-npm run build
-```
+### JavaScript module usage
 
-### Run your tests
+```ts
+import { TsGit } from '@nathanfriend/ts-git';
 
-```
-npm run test
+// TODO: add JavaScript/TypeScript usage details here
 ```
 
-### Lints and fixes files
+### Command line usage
 
+```bash
+# TODO: add command line usage details here
 ```
-npm run lint
-```
-
-### Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).
