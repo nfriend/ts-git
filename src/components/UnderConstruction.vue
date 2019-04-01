@@ -1,22 +1,17 @@
 <template>
-  <div class="jumbotron mt-5">
-    <h1 class="display-4">Hello, world!</h1>
-    <p class="lead">
-      Welcome to <code>ts-git</code>. This project is currently under
-      construction.
-    </p>
-    <hr class="my-4" />
+  <b-jumbotron
+    class="mt-5"
+    header="ts-git"
+    lead="git, implemented in TypeScript"
+  >
     <p>
-      In the meantime, check out the source on
-      <a href="https://gitlab.com/nfriend/ts-git">GitLab</a>.
+      This project is currently under construction. In the meantime, check out
+      the source on <a href="https://gitlab.com/nfriend/ts-git">GitLab</a>.
     </p>
-    <a
-      class="btn btn-primary btn-lg"
-      href="https://gitlab.com/nfriend/ts-git"
-      role="button"
-      >View source</a
+    <b-button variant="primary" href="https://gitlab.com/nfriend/ts-git"
+      >View source</b-button
     >
-  </div>
+  </b-jumbotron>
 </template>
 
 <script lang="ts">
