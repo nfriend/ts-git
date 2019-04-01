@@ -1,6 +1,7 @@
 image: node:8
 
 before_script:
+  - cd demo-app
   - npm install
 
 pages:
