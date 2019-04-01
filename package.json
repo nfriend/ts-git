@@ -1,0 +1,23 @@
+{
+  "name": "ts-git",
+  "version": "1.0.0",
+  "description": "A naïve implementation of git, written in TypeScript. Built to help me understand how git works under the hood.",
+  "scripts": {
+    "build": "cp -r src public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/nfriend/ts-git.git"
+  },
+  "keywords": [
+    "git",
+    "typescript",
+    "javascript"
+  ],
+  "author": "Nathan Friend",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://gitlab.com/nfriend/ts-git/issues"
+  },
+  "homepage": "https://gitlab.com/nfriend/ts-git#readme"
+}
