@@ -3,6 +3,9 @@
   "version": "0.1.3",
   "description": "A naïve implementation of git, written in TypeScript. Built to help me understand how git works under the hood.",
   "main": "dist/index.js",
+  "bin": {
+    "ts-git": "dist/cli.js"
+  },
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
@@ -25,5 +28,9 @@
   "homepage": "https://gitlab.com/nfriend/ts-git#readme",
   "devDependencies": {
     "typescript": "^3.4.1"
+  },
+  "dependencies": {
+    "@types/yargs": "^12.0.10",
+    "yargs": "^13.2.2"
   }
 }
