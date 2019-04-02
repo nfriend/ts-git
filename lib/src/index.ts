@@ -1,5 +1,3 @@
-export class MyTestClass {
-  doSomething() {
-    console.log('hello, world!');
-  }
+export class TsGit {
+  init() {}
 }

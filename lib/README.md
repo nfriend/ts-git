@@ -19,3 +19,15 @@ npm run build
 ```
 npm run watch
 ```
+
+### Runs the libary's tests
+
+```
+npm run test
+```
+
+### Runs the library's tests in `watch` mode
+
+```
+npm run test-watch
+```
