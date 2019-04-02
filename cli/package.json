@@ -1,9 +1,11 @@
 {
-  "name": "@nathanfriend/ts-git",
-  "version": "0.1.4",
-  "description": "A naïve implementation of git, written in TypeScript. Built to help me understand how git works under the hood.",
+  "name": "@nathanfriend/ts-git-cli",
+  "version": "0.1.0",
+  "description": "A CLI wrapper for the ts-git JavaScript library",
   "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "bin": {
+    "ts-git": "dist/index.js"
+  },
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch"
@@ -14,6 +16,7 @@
   },
   "keywords": [
     "git",
+    "cli",
     "typescript",
     "javascript"
   ],
@@ -23,6 +26,10 @@
     "url": "https://gitlab.com/nfriend/ts-git/issues"
   },
   "homepage": "https://gitlab.com/nfriend/ts-git#readme",
+  "dependencies": {
+    "@types/yargs": "^12.0.10",
+    "yargs": "^13.2.2"
+  },
   "devDependencies": {
     "typescript": "^3.4.1"
   }

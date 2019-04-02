@@ -4,11 +4,9 @@
 
 A naïve implementation of [git](https://git-scm.com/), written in [TypeScript](https://www.typescriptlang.org/): http://ts-git.nathanfriend.io. Built to help me understand how git works under the hood.
 
-This repo contains the source for both the [`ts-git` library](./lib) and the [`ts-git` demo app](./demo-app).
+Please don't actually use `ts-git` for anything serious :joy:.
 
-## Installation
-
-`npm install @nathanfriend/ts-git --save`
+This repo contains the source the [`ts-git` library](./lib), the [`ts-git-cli` CLI wrapper](./cli), and the [`ts-git` demo app](./demo-app).
 
 ## Usage
 
@@ -16,14 +14,34 @@ The `ts-git` library can be used in two ways: as an ES6 JavaScript module or as 
 
 ### JavaScript module usage
 
+First, install the module:
+
+```bash
+npm install @nathanfriend/ts-git --save
+```
+
+Then, import and use the module:
+
 ```ts
 import { TsGit } from '@nathanfriend/ts-git';
 
 // TODO: add JavaScript/TypeScript usage details here
 ```
 
+More complete usage details can be found in the [`lib`](./lib) directory in this repo.
+
 ### Command line usage
 
+First, install the `ts-git-cli` module globally:
+
 ```bash
-# TODO: add command line usage details here
+npm install -g @nathanfriend/ts-git-cli
 ```
+
+Then use the `ts-git-cli` command as a drop-in replacement for `git`:
+
+```bash
+ts-git-cli --help
+```
+
+More complete usage details can be found in the [`cli`](./cli) directory of this repo.
