@@ -4,6 +4,8 @@
 
 A naïve implementation of [git](https://git-scm.com/), written in [TypeScript](https://www.typescriptlang.org/): http://ts-git.nathanfriend.io. Built to help me understand how git works under the hood.
 
+This implementation is heavily based on the excellent [Write yourself a Git!](https://wyag.thb.lt/#org94e7cd7) tutorial.
+
 Please don't actually use `ts-git` for anything serious :joy:.
 
 This repo contains the source the [`ts-git` library](./lib), the [`ts-git-cli` CLI wrapper](./cli), and the [`ts-git` demo app](./demo-app).
