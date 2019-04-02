@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-import { MyTestClass } from '@nathanfriend/ts-git';
+import { TsGit } from '@nathanfriend/ts-git';
 import * as yargs from 'yargs';
 
 console.log('something: ' + yargs.argv.something);
-const test = new MyTestClass();
-test.doSomething();
+const test = new TsGit();
+test.init();

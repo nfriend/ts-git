@@ -2,8 +2,8 @@
   "name": "@nathanfriend/ts-git",
   "version": "0.1.4",
   "description": "A naïve implementation of git, written in TypeScript. Built to help me understand how git works under the hood.",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
@@ -30,5 +30,9 @@
     "jasmine": "^3.3.1",
     "nodemon": "^1.18.10",
     "typescript": "^3.4.1"
+  },
+  "dependencies": {
+    "@types/fs-extra": "^5.0.5",
+    "fs-extra": "^7.0.1"
   }
 }
