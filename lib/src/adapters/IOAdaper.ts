@@ -11,4 +11,10 @@ export interface IOAdapter {
    * @param contents The contents to write
    */
   write(filePath: string, contents: string): Promise<void>;
+
+  /**
+   * Determines if the provided path exists and is a directory
+   * @param path The path of the directory to test
+   */
+  isDirectory(path: string): Promise<boolean>;
 }

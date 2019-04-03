@@ -1,10 +1,17 @@
 import { IOAdapter } from './adapters/IOAdaper';
 import { FileSystemAdapter } from './adapters/FileSystemAdapter';
-import { init } from './commands/init';
+import { initCommand } from './commands/init';
 
 export class TsGit {
-  ioAdapter: IOAdapter = new FileSystemAdapter();
+  constructor(private ioAdapter: IOAdapter = new FileSystemAdapter()) {}
 
   // commands
-  init = init;
+
+  /**
+   * Equivalent to to git's "init" command
+   * @param cwd The current working directory
+   */
+  init(cwd: string) {
+    initCommand(this.ioAdapter, cwd);
+  }
 }

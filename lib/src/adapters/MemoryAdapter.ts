@@ -17,4 +17,8 @@ export class MemoryAdapter implements IOAdapter {
     this.fileSystem[filePath] = contents;
     return Promise.resolve();
   }
+
+  async isDirectory(path: string): Promise<boolean> {
+    throw new Error('Method not implemented.');
+  }
 }

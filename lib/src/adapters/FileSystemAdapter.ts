@@ -9,4 +9,8 @@ export class FileSystemAdapter implements IOAdapter {
   async write(filePath: string, contents: string): Promise<void> {
     return fs.writeFile(filePath, contents);
   }
+
+  async isDirectory(path: string): Promise<boolean> {
+    throw new Error('Method not implemented.');
+  }
 }

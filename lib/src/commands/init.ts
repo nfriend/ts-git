@@ -1,3 +1,3 @@
-export const init = () => {
-  console.log('init was called!');
-};
+import { IOAdapter } from '..';
+
+export const initCommand = (ioAdapter: IOAdapter, cwd: string) => {};
