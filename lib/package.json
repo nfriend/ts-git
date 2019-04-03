@@ -32,7 +32,12 @@
     "typescript": "^3.4.1"
   },
   "dependencies": {
+    "@types/dropboxjs": "0.0.29",
+    "@types/filesystem": "0.0.29",
     "@types/fs-extra": "^5.0.5",
+    "@types/node": "~7.0",
+    "bluebird": "^3.5.4",
+    "browserfs": "^1.4.3",
     "fs-extra": "^7.0.1"
   }
 }

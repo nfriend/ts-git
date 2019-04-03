@@ -1,17 +1,37 @@
-import { IOAdapter } from './adapters/IOAdaper';
-import { FileSystemAdapter } from './adapters/FileSystemAdapter';
 import { initCommand } from './commands/init';
+import * as browserfs from 'browserfs';
+import * as fs from 'fs';
+
+export type FileSystemType = 'InMemory' | 'LocalStorage' | 'FileSystem';
 
 export class TsGit {
-  constructor(private ioAdapter: IOAdapter = new FileSystemAdapter()) {}
+  private fsPromise: Promise<typeof fs>;
 
-  // commands
+  constructor(fileSystemType: FileSystemType = 'FileSystem') {
+    this.fsPromise = new Promise((resolve, reject) => {
+      if (fileSystemType === 'LocalStorage') {
+        reject('LocalStorage file system is not yet implemented!');
+      } else if (fileSystemType === 'InMemory') {
+        reject('InMemory file system is not yet implemented!');
+      } else if (fileSystemType === 'FileSystem') {
+        resolve(fs);
+      } else {
+        reject(
+          `Unknown file system type: "${fileSystemType}". ` +
+            ` Expected 'InMemory', 'LocalStorage', or 'FileSystem'`,
+        );
+      }
+    });
+  }
+
+  // Commands
 
   /**
    * Equivalent to to git's "init" command
    * @param cwd The current working directory
    */
-  init(cwd: string) {
-    initCommand(this.ioAdapter, cwd);
+  async init(cwd: string): Promise<void> {
+    const fs = await this.fsPromise;
+    initCommand(fs, cwd);
   }
 }

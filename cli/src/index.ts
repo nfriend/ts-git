@@ -5,8 +5,9 @@ import * as yargs from 'yargs';
 const tsGit = new TsGit();
 
 yargs
-  .command('init', 'Create an empty Git repository', undefined, () => {
+  .command('init', 'Create an empty Git repository', {}, argv => {
     tsGit.init(process.cwd());
   })
   .help('h')
-  .alias('h', 'help').argv;
+  .alias('h', 'help')
+  .demandCommand().argv;
