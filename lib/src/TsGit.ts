@@ -1,6 +1,10 @@
 import { initCommand } from './commands/init';
 import * as browserfs from 'browserfs';
+import * as bluebird from 'bluebird';
+
+// TODO: make sure this works in the browser
 import * as fs from 'fs';
+bluebird.promisifyAll(fs);
 
 export type FileSystemType = 'InMemory' | 'LocalStorage' | 'FileSystem';
 
