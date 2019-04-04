@@ -1,6 +1,7 @@
 import { initCommand } from './commands/init';
 import * as browserfs from 'browserfs';
 import * as bluebird from 'bluebird';
+import { CommandResult } from './commands/CommandResult';
 
 // TODO: make sure this works in the browser
 import * as fs from 'fs';
@@ -16,7 +17,15 @@ export class TsGit {
       if (fileSystemType === 'LocalStorage') {
         reject('LocalStorage file system is not yet implemented!');
       } else if (fileSystemType === 'InMemory') {
-        reject('InMemory file system is not yet implemented!');
+        browserfs.configure({ fs: 'InMemory', options: {} }, err => {
+          if (err) {
+            reject(err);
+          } else {
+            const inMemoryFS: any = browserfs.BFSRequire('fs');
+            bluebird.promisifyAll(inMemoryFS);
+            resolve(inMemoryFS);
+          }
+        });
       } else if (fileSystemType === 'FileSystem') {
         resolve(fs);
       } else {
@@ -34,8 +43,8 @@ export class TsGit {
    * Equivalent to to git's "init" command
    * @param cwd The current working directory
    */
-  async init(cwd: string): Promise<void> {
+  async init(cwd: string): Promise<CommandResult> {
     const fs = await this.fsPromise;
-    initCommand(fs, cwd);
+    return await initCommand(fs, cwd);
   }
 }

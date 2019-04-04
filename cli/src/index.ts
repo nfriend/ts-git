@@ -2,12 +2,14 @@
 import { TsGit } from '@nathanfriend/ts-git';
 import * as yargs from 'yargs';
 import chalk from 'chalk';
+import { reportResult } from './report-result';
 
 const tsGit = new TsGit();
 
 const argv = yargs
-  .command('init', 'Create an empty Git repository', {}, argv => {
-    tsGit.init(process.cwd());
+  .command('init', 'Create an empty Git repository', {}, async argv => {
+    const result = await tsGit.init(process.cwd());
+    reportResult(result);
   })
   .command('*', 'Default command', {}, argv => {
     // TODO: is there a better way to access the command and its parameters?
