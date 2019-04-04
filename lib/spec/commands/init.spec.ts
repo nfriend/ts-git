@@ -47,11 +47,16 @@ describe(`init command`, () => {
       '/test/.git/refs/heads',
       '/test/.git/refs/tags',
     ];
-    const expectedFiles = [
-      '/test/.git/HEAD',
-      '/test/.git/config',
-      '/test/.git/description',
-    ];
+    const expectedFiles = {
+      '/test/.git/HEAD': 'ref: refs/heads/master\n',
+      '/test/.git/config':
+        "Unnamed repository; edit this file 'description' to name the repository.\n",
+      '/test/.git/description':
+        '[core]\n' +
+        '\trepositoryformatversion = 0\n' +
+        '\tfilemode = true\n' +
+        '\tbare = false\n',
+    };
 
     for (const dir of expectedDirs) {
       let stat: Stats;
@@ -63,14 +68,17 @@ describe(`init command`, () => {
       }
     }
 
-    for (const file of expectedFiles) {
+    for (const file in expectedFiles) {
       let stat: Stats;
       try {
         stat = await fs.statAsync(file);
         expect(stat.isFile()).toBe(true);
       } catch (err) {
-        fail(`file "${file}" was not created`);
+        fail(`file "${file}" was not created. Error: ${err}`);
       }
+
+      const contents = await fs.readFileAsync(file, 'utf8');
+      expect(contents).toBe(expectedFiles[file]);
     }
 
     expect(result).toEqual({

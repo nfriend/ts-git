@@ -2,15 +2,27 @@
 import { TsGit } from '@nathanfriend/ts-git';
 import * as yargs from 'yargs';
 import chalk from 'chalk';
+import * as path from 'path';
 import { reportResult } from './report-result';
 
 const tsGit = new TsGit();
 
 const argv = yargs
-  .command('init', 'Create an empty Git repository', {}, async argv => {
-    const result = await tsGit.init(process.cwd());
-    reportResult(result);
-  })
+  .command(
+    'init [directory]',
+    'Create an empty Git repository',
+    yargs => {
+      return yargs.positional('directory', {
+        describe: 'Optional directory to initialize the git repo in',
+        type: 'string',
+        default: process.cwd(),
+      });
+    },
+    async (argv: any) => {
+      const result = await tsGit.init(path.resolve(argv.directory));
+      reportResult(result);
+    },
+  )
   .command('*', 'Default command', {}, argv => {
     // TODO: is there a better way to access the command and its parameters?
     if (argv._.length !== 0) {

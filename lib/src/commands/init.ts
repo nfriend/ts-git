@@ -1,16 +1,31 @@
 import * as path from 'path';
 import { CommandResult } from './CommandResult';
+import Stats from 'browserfs/dist/node/core/node_fs_stats';
 
 export const initCommand = async (
   fs: any,
-  cwd: string,
+  directory: string,
 ): Promise<CommandResult> => {
-  const gitDir = path.join(cwd, '.git');
+  const gitDir = path.join(directory, '.git');
+
+  // Test if the directory that was passed already exists
+  let directoryAlreadyExists = false;
+  try {
+    const stats: Stats = await fs.statAsync(directory);
+    directoryAlreadyExists = stats.isDirectory();
+  } catch (err) {
+    return {
+      success: false,
+      message:
+        `The directory ${directory} does not exist. ` +
+        `ts-git only supports initializing git repos in directories that already exist.`,
+    };
+  }
 
   // Test if we're already in the root of an existing git repo.
   let isInRootOfGitRepo = false;
   try {
-    const stats = await fs.statAsync(gitDir);
+    const stats: Stats = await fs.statAsync(gitDir);
     isInRootOfGitRepo = stats.isDirectory();
   } catch (err) {}
 
@@ -31,14 +46,28 @@ export const initCommand = async (
     '.git/refs/heads',
     '.git/refs/tags',
   ];
-  const filesToCreate = ['.git/HEAD', '.git/config', '.git/description'];
+
+  const filesToCreate = {
+    '.git/HEAD': 'ref: refs/heads/master\n',
+    '.git/config':
+      "Unnamed repository; edit this file 'description' to name the repository.\n",
+    '.git/description':
+      '[core]\n' +
+      '\trepositoryformatversion = 0\n' +
+      '\tfilemode = true\n' +
+      '\tbare = false\n',
+  };
 
   for (const dir of dirsToCreate) {
-    await fs.mkdirAsync(path.join(cwd, dir));
+    await fs.mkdirAsync(path.join(directory, dir));
   }
 
-  for (const file of filesToCreate) {
-    await fs.appendFileAsync(path.join(cwd, file), '', 'utf8');
+  for (const file in filesToCreate) {
+    await fs.appendFileAsync(
+      path.join(directory, file),
+      filesToCreate[file],
+      'utf8',
+    );
   }
 
   return {
