@@ -15,11 +15,6 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 // to use an icon in a Vue template:
 // <font-awesome-icon icon="exclamation-triangle" />
 
-import { MyTestClass } from '@nathanfriend/ts-git';
-
-const test = new MyTestClass();
-test.doSomething();
-
 library.add(faWrench, faHardHat, faExclamationTriangle);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
