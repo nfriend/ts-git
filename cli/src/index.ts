@@ -14,12 +14,34 @@ const argv = yargs
     yargs => {
       return yargs.positional('directory', {
         describe: 'Optional directory to initialize the git repo in',
-        type: 'string',
         default: process.cwd(),
       });
     },
     async (argv: any) => {
       const result = await tsGit.init(path.resolve(argv.directory));
+      reportResult(result);
+    },
+  )
+  .command(
+    'cat-file <type> <object>',
+    'Provide content or type and size information for repository objects',
+    yargs => {
+      return yargs
+        .positional('type', { describe: 'The type of the object' })
+        .positional('object', { describe: 'The name of the object to show' });
+    },
+    async (argv: any) => {
+      const type = argv.type.toLowerCase();
+
+      if (!['commit', 'blob', 'tag', 'tree'].includes(type)) {
+        reportResult({
+          success: false,
+          message: `fatal: Not a valid object type: "${argv.type}"`,
+        });
+        return;
+      }
+
+      const result = await tsGit.catFile(process.cwd(), type, argv.object);
       reportResult(result);
     },
   )

@@ -24,8 +24,8 @@ describe(`init command`, () => {
   });
 
   it(`should not do anything if a .git directory already exists`, async done => {
-    fs.mkdirSync('/test');
-    fs.mkdirSync('/test/.git');
+    await fs.mkdirAsync('/test');
+    await fs.mkdirAsync('/test/.git');
     const result = await initCommand(fs, '/test');
 
     expect(result).toEqual({

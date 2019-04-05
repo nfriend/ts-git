@@ -5,6 +5,7 @@ import { CommandResult } from './commands/CommandResult';
 
 // TODO: make sure this works in the browser
 import * as fs from 'fs';
+import { catFileCommand, GitObjectType } from './commands/cat-file';
 bluebird.promisifyAll(fs);
 
 export type FileSystemType = 'InMemory' | 'LocalStorage' | 'FileSystem';
@@ -37,14 +38,44 @@ export class TsGit {
     });
   }
 
+  private getUexpectedResult(err): CommandResult {
+    return {
+      success: false,
+      message: `An unexpected error occurred!\n${err}`,
+    };
+  }
+
   // Commands
 
   /**
-   * Equivalent to to git's "init" command
+   * Equivalent to git's "init" command
    * @param cwd The current working directory
    */
   async init(cwd: string): Promise<CommandResult> {
-    const fs = await this.fsPromise;
-    return await initCommand(fs, cwd);
+    try {
+      const fs = await this.fsPromise;
+      return await initCommand(fs, cwd);
+    } catch (err) {
+      return this.getUexpectedResult(err);
+    }
+  }
+
+  /**
+   * Equivalent to git's "cat-file" command
+   * @param cwd The current working directory
+   * @param type The type of the object
+   * @param object The name of the object to show
+   */
+  async catFile(
+    cwd: string,
+    type: GitObjectType,
+    object: string,
+  ): Promise<CommandResult> {
+    try {
+      const fs = await this.fsPromise;
+      return await catFileCommand(fs, cwd, type, object);
+    } catch (err) {
+      return this.getUexpectedResult(err);
+    }
   }
 }
