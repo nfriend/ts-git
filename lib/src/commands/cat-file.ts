@@ -1,5 +1,6 @@
 import { CommandResult } from './CommandResult';
 import { findRepoRoot } from '../../util/file-system/find-repo-root';
+import { notAGitRepoResult } from './shared/not-a-git-repo-result';
 import * as path from 'path';
 import * as bluebird from 'bluebird';
 
@@ -16,11 +17,7 @@ export const catFileCommand = async (
 ): Promise<CommandResult> => {
   const repoRoot = await findRepoRoot(fs, cwd);
   if (!repoRoot) {
-    return {
-      success: false,
-      message:
-        'fatal: not a git repository (or any of the parent directories): .git',
-    };
+    return notAGitRepoResult;
   }
 
   const objDirectory = object.substring(0, 2);
