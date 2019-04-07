@@ -28,7 +28,7 @@ export const catFileCommand = async (
 
   let fileBuffer: Buffer;
   try {
-    const fileBuffer = await fs.readFileAsync(
+    fileBuffer = await fs.readFileAsync(
       path.resolve(repoRoot, '.git', objDirectory, objFilename),
     );
   } catch (err) {
@@ -38,22 +38,20 @@ export const catFileCommand = async (
     };
   }
 
-  let fileContents: string;
+  let fileContents: Buffer;
   try {
-    fileContents = await zlib.inflateAsync(fileBuffer);
+    fileContents = await zlib.unzipAsync(fileBuffer);
   } catch (err) {
     return {
       success: false,
 
       // TODO: what message does the real git show in this situation?
-      message: `fatal: Unable to decompress object ${object}`,
+      message: `fatal: Unable to decompress object ${object}. ${err}`,
     };
   }
 
   return {
     success: true,
-    message: fileContents,
+    message: fileContents.toString(),
   };
-
-  throw new Error('cat-file is not yet implemented!');
 };
