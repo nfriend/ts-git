@@ -3,18 +3,17 @@ import { findRepoRoot } from '../../util/file-system/find-repo-root';
 import { notAGitRepoResult } from './shared/not-a-git-repo-result';
 import * as path from 'path';
 import * as bluebird from 'bluebird';
+import { GitObjectType } from './shared/GitObjectType';
 
 const zlib = require('zlib');
 bluebird.promisifyAll(zlib);
-
-export type GitObjectType = 'blob' | 'commit' | 'tag' | 'tree';
 
 export const catFileCommand = async (
   fs: any,
   cwd: string,
   type: GitObjectType,
   object: string,
-): Promise<CommandResult> => {
+): Promise<CommandResult<string>> => {
   const repoRoot = await findRepoRoot(fs, cwd);
   if (!repoRoot) {
     return notAGitRepoResult;
@@ -47,8 +46,11 @@ export const catFileCommand = async (
     };
   }
 
+  const fileContentsAsString = fileContents.toString();
+
   return {
     success: true,
-    message: fileContents.toString(),
+    message: fileContentsAsString,
+    data: fileContentsAsString,
   };
 };

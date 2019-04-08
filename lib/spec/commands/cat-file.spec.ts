@@ -4,11 +4,9 @@ import * as bluebird from 'bluebird';
 import * as sha1 from 'js-sha1';
 import * as path from 'path';
 import { catFileCommand } from '../../src/commands/cat-file';
+import { hashObjectCommand } from '../../src/commands/hash-object';
 
-const zlib = require('zlib');
-bluebird.promisifyAll(zlib);
-
-describe(`init command`, () => {
+describe(`cat-file command`, () => {
   let fs: any;
   const gitObj = 'This is a test git file';
   const gitObjSha = sha1(gitObj);
@@ -27,18 +25,12 @@ describe(`init command`, () => {
       fs = browserfs.BFSRequire('fs');
       bluebird.promisifyAll(fs);
 
-      const gitObjDirectory = gitObjSha.substring(0, 2);
-      const gitObjFilename = gitObjSha.substring(2);
-      const zippedGitObj = await zlib.deflateAsync(gitObj);
-
       await fs.mkdirAsync('/test');
       await fs.mkdirAsync(path.join('/test', '.git'));
-      await fs.mkdirAsync(path.join('/test', '.git', gitObjDirectory));
-
-      await fs.appendFileAsync(
-        path.join('/test', '.git', gitObjDirectory, gitObjFilename),
-        zippedGitObj,
-      );
+      await fs.mkdirAsync(path.join('/test', 'subdirectory'));
+      const filePath = path.join('/test', 'subdirectory', 'my-file.txt');
+      await fs.appendFileAsync(filePath, gitObj);
+      await hashObjectCommand(fs, '/test', filePath, true);
 
       done();
     });
@@ -50,6 +42,24 @@ describe(`init command`, () => {
     expect(result).toEqual({
       success: true,
       message: gitObj,
+      data: gitObj,
+    });
+
+    done();
+  });
+
+  it(`should return the unzipped contents a file when a valid hash is provided even if called in a subdirectory of a git repo`, async done => {
+    const result = await catFileCommand(
+      fs,
+      path.join('/test', 'subdirectory'),
+      'commit',
+      gitObjSha,
+    );
+
+    expect(result).toEqual({
+      success: true,
+      message: gitObj,
+      data: gitObj,
     });
 
     done();
