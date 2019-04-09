@@ -1,10 +1,11 @@
 import * as path from 'path';
-import * as sha1 from 'js-sha1';
 import * as bluebird from 'bluebird';
-import { GitObjectType } from './shared/GitObjectType';
+import { GitObjectType } from '../models/GitObjectType';
 import { CommandResult } from './CommandResult';
 import { findRepoRoot } from '../../util/file-system/find-repo-root';
 import { notAGitRepoResult } from './shared/not-a-git-repo-result';
+import { GitObject } from '../models/GitObject';
+import { GitBlob } from '../models/GitBlob';
 
 const zlib = require('zlib');
 bluebird.promisifyAll(zlib);
@@ -15,7 +16,7 @@ export const hashObjectCommand = async (
   filePath: string,
   write: boolean = false,
   type: GitObjectType = 'blob',
-): Promise<CommandResult<string>> => {
+): Promise<CommandResult<GitObject>> => {
   const repoRoot = await findRepoRoot(fs, cwd);
   if (!repoRoot) {
     return notAGitRepoResult;
@@ -31,14 +32,21 @@ export const hashObjectCommand = async (
     };
   }
 
-  const fileContents = fileBuffer.toString();
-  const fileSha1 = sha1(fileContents);
+  let gitObj: GitObject;
+  if (type === 'blob') {
+    const blob = new GitBlob();
+    blob.blobData = fileBuffer.toString();
+    gitObj = blob;
+  } else {
+    throw new Error(`type ${type} is not yet implemented`);
+  }
 
   if (write) {
-    const gitObjDirectory = fileSha1.substring(0, 2);
-    const gitObjFilename = fileSha1.substring(2);
+    const sha1 = gitObj.getSha1();
+    const gitObjDirectory = sha1.substring(0, 2);
+    const gitObjFilename = sha1.substring(2);
 
-    const zippedFileContents = await zlib.deflateAsync(fileContents);
+    const zippedFileContents = await gitObj.serialize();
     const gitObjFilePath = path.join(
       repoRoot,
       '.git',
@@ -59,7 +67,7 @@ export const hashObjectCommand = async (
 
   return {
     success: true,
-    message: fileSha1,
-    data: fileSha1,
+    message: gitObj.getSha1(),
+    data: gitObj,
   };
 };

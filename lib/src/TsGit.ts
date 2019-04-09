@@ -2,10 +2,11 @@ import { initCommand } from './commands/init';
 import * as browserfs from 'browserfs';
 import * as bluebird from 'bluebird';
 import { CommandResult } from './commands/CommandResult';
+import { catFileCommand } from './commands/cat-file';
+import { GitObjectType } from './models/GitObjectType';
 
 // TODO: make sure this works in the browser
 import * as fs from 'fs';
-import { catFileCommand, GitObjectType } from './commands/cat-file';
 bluebird.promisifyAll(fs);
 
 export type FileSystemType = 'InMemory' | 'LocalStorage' | 'FileSystem';

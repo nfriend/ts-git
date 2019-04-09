@@ -1,7 +1,6 @@
 import { Logger } from '../../util/Logger';
 import * as browserfs from 'browserfs';
 import * as bluebird from 'bluebird';
-import * as sha1 from 'js-sha1';
 import * as path from 'path';
 import { hashObjectCommand } from '../../src/commands/hash-object';
 import { catFileCommand } from '../../src/commands/cat-file';
@@ -11,8 +10,6 @@ bluebird.promisifyAll(zlib);
 
 describe(`hash-object command`, () => {
   let fs: any;
-  const gitObj = 'This is a test git file';
-  const gitObjSha = sha1(gitObj);
 
   beforeAll(() => {
     Logger.isEnabled = false;
@@ -34,7 +31,7 @@ describe(`hash-object command`, () => {
 
       await fs.appendFileAsync(
         path.join('/test', 'subdirectory', 'my-file.txt'),
-        gitObj,
+        'This is a git file',
       );
 
       done();
@@ -42,59 +39,47 @@ describe(`hash-object command`, () => {
   });
 
   it(`should write the provided file to git's internal storage`, async done => {
-    const result = await hashObjectCommand(
+    const hashObjectResult = await hashObjectCommand(
       fs,
       path.join('/test', 'subdirectory'),
       path.join('/test', 'subdirectory', 'my-file.txt'),
       true,
     );
 
-    expect(result).toEqual({
-      success: true,
-      message: gitObjSha,
-      data: gitObjSha,
-    });
-
     const catFileResult = await catFileCommand(
       fs,
       path.join('/test', 'subdirectory'),
       'blob',
-      gitObjSha,
+      hashObjectResult.data.getSha1(),
     );
 
-    expect(catFileResult).toEqual({
+    expect(hashObjectResult).toEqual({
       success: true,
-      message: gitObj,
-      data: gitObj,
+      message: catFileResult.data.getSha1(),
+      data: catFileResult.data,
     });
 
     done();
   });
 
   it(`should print the provided file's hash, but not write the file to git's internal storage`, async done => {
-    const result = await hashObjectCommand(
+    const hashObjectResult = await hashObjectCommand(
       fs,
       path.join('/test', 'subdirectory'),
       path.join('/test', 'subdirectory', 'my-file.txt'),
       false,
     );
 
-    expect(result).toEqual({
-      success: true,
-      message: gitObjSha,
-      data: gitObjSha,
-    });
-
     const catFileResult = await catFileCommand(
       fs,
       path.join('/test', 'subdirectory'),
       'blob',
-      gitObjSha,
+      hashObjectResult.data.getSha1(),
     );
 
     expect(catFileResult).toEqual({
       success: false,
-      message: `fatal: Not a valid object name ${gitObjSha}`,
+      message: `fatal: Not a valid object name ${hashObjectResult.data.getSha1()}`,
     });
 
     done();

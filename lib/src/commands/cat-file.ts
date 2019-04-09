@@ -3,7 +3,9 @@ import { findRepoRoot } from '../../util/file-system/find-repo-root';
 import { notAGitRepoResult } from './shared/not-a-git-repo-result';
 import * as path from 'path';
 import * as bluebird from 'bluebird';
-import { GitObjectType } from './shared/GitObjectType';
+import { GitObjectType } from '../models/GitObjectType';
+import { GitObject } from '../models/GitObject';
+import { GitBlob } from '../models/GitBlob';
 
 const zlib = require('zlib');
 bluebird.promisifyAll(zlib);
@@ -13,7 +15,7 @@ export const catFileCommand = async (
   cwd: string,
   type: GitObjectType,
   object: string,
-): Promise<CommandResult<string>> => {
+): Promise<CommandResult<GitObject>> => {
   const repoRoot = await findRepoRoot(fs, cwd);
   if (!repoRoot) {
     return notAGitRepoResult;
@@ -34,23 +36,26 @@ export const catFileCommand = async (
     };
   }
 
-  let fileContents: Buffer;
+  let gitObj: GitObject;
+  if (type === 'blob') {
+    gitObj = new GitBlob();
+  } else {
+    throw new Error(`type ${type} is not yet implemented`);
+  }
   try {
-    fileContents = await zlib.unzipAsync(fileBuffer);
+    await gitObj.deserialize(fileBuffer);
   } catch (err) {
     return {
       success: false,
 
       // TODO: what message does the real git show in this situation?
-      message: `fatal: Unable to decompress object ${object}. ${err}`,
+      message: `fatal: Unable to read object ${object}. ${err}`,
     };
   }
 
-  const fileContentsAsString = fileContents.toString();
-
   return {
     success: true,
-    message: fileContentsAsString,
-    data: fileContentsAsString,
+    message: gitObj.getContents(),
+    data: gitObj,
   };
 };
