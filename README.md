@@ -16,6 +16,8 @@ The `ts-git` library can be used in two ways: as an ES6 JavaScript module or as 
 
 ### JavaScript module usage
 
+This module is designed to work both in the browser and on the server (in Node).
+
 First, install the module:
 
 ```bash
@@ -27,7 +29,10 @@ Then, import and use the module:
 ```ts
 import { TsGit } from '@nathanfriend/ts-git';
 
-// TODO: add JavaScript/TypeScript usage details here
+const tsGit = new TsGit();
+
+// View the documentation in the /lib directory
+// of this repo for more usage details
 ```
 
 More complete usage details can be found in the [`lib`](./lib) directory in this repo.
