@@ -1,35 +1,34 @@
 <template>
-  <VueTerminal
-    :task-list="taskList"
-    :command-list="commandList"
-    :title="'test'"
-  />
+  <div class="terminal-container d-flex flex-column">
+    <div class="flex-grow-1"></div>
+    <input
+      type="text"
+      autofocus
+      autocomplete="off"
+      spellcheck="off"
+      value="░"
+    />
+  </div>
 </template>
+
+<style lang="scss" scoped>
+.terminal-container {
+  height: 500px;
+  background: #1e1e1e;
+  font-family: monospace;
+
+  input {
+    background: none;
+    border: none;
+    outline: none;
+    color: white;
+  }
+}
+</style>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import VueTerminal from 'vue-terminal';
 
-@Component({
-  components: {
-    VueTerminal,
-  },
-})
-export default class Terminal extends Vue {
-  taskList = {
-    defaultTask: {
-      description: 'this is default task.',
-      async defaultTask(pushToList) {
-        return await {
-          type: 'success',
-          label: 'Success',
-          message: 'Hello, world!',
-        };
-      },
-    },
-  };
-  commandList = {
-    // your commands
-  };
-}
+@Component
+export default class Terminal extends Vue {}
 </script>

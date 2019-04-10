@@ -39,7 +39,6 @@
     "vue-class-component": "^6.0.0",
     "vue-property-decorator": "^8.0.0",
     "vue-router": "^3.0.1",
-    "vue-terminal": "^1.0.1-beta",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
