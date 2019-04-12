@@ -1,16 +1,17 @@
 <template>
-  <div class="container">
-    <UnderConstruction />
+  <div class="d-flex h-100">
+    <Terminal class="flex-even d-flex" />
+    <div class="flex-even">Hello world!</div>
   </div>
 </template>
 
 <script>
 import { Component, Vue } from 'vue-property-decorator';
-import UnderConstruction from '@/components/UnderConstruction.vue';
+import Terminal from '@/components/Terminal.vue';
 
 @Component({
   components: {
-    UnderConstruction,
+    Terminal,
   },
 })
 export default class Home extends Vue {}

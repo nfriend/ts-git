@@ -1,0 +1,9 @@
+// This file doesn't actually do anything - it's
+// just here to suppress warnings from the Vetur extension.
+// Vetur doesn't like that the Vue app isn't in the
+// root of the project.
+{
+  "compilerOptions": {
+    "experimentalDecorators": true
+  }
+}

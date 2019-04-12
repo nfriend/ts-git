@@ -1,50 +1,43 @@
 <template>
-  <VueTerminal
-    :task-list="taskList"
-    :command-list="commandList"
-    :show-header="false"
-    :show-initial-cd="false"
-    :show-help-message="false"
-    :unknown-command-message="unknownCommandMessage"
-    default-task="greet"
-    greeting="Welcome to ts-git!"
+  <VueCommand
+    :commands="commands"
+    :hide-bar="true"
+    help-text='Try "ts-git --help"'
+    :show-help="true"
     prompt=">"
+    class="flex-even"
   />
 </template>
 
+<style lang="scss">
+.vue-command {
+  .term {
+    width: 100%;
+
+    .term-std {
+      min-height: 100%;
+      max-height: 100%;
+      overflow-y: scroll;
+    }
+  }
+}
+</style>
+
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import VueTerminal from '@nathanfriend/vue-terminal';
+import VueCommand from 'vue-command';
+import 'vue-command/dist/vue-command.css';
 
 @Component({
   components: {
-    VueTerminal,
+    VueCommand,
   },
 })
 export default class Terminal extends Vue {
-  taskList = {
-    greet: {
-      description: 'Writes a greeting to the console',
-      async greet(pushToList) {
-        return await {
-          message: 'To see a list of available commands, run "ts-git --help"',
-        };
-      },
+  commands = {
+    'ts-git': ({ _ }) => {
+      return `You typed: "${_.join(' ')}"`;
     },
-    'ts-git': {
-      description: 'Runs ts-git',
-      'ts-git': async (pushToList, input) => {
-        return await {
-          message: `You ran "${input}"`,
-        };
-      },
-    },
-  };
-  commandList = {};
-  unknownCommandMessage = {
-    label: 'error',
-    type: 'error',
-    message: 'Unknown command. Try ts-git --help',
   };
 }
 </script>
