@@ -5,6 +5,10 @@
 </template>
 
 <style lang="scss">
+#app {
+  background-color: #e9ecef;
+}
+
 // https://stackoverflow.com/a/51775832/1063392
 .flex-even {
   flex: 1;
