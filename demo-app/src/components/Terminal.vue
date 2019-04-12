@@ -49,7 +49,6 @@
 import { Component, Vue } from 'vue-property-decorator';
 import VueCommand from 'vue-command';
 import 'vue-command/dist/vue-command.css';
-import { setTimeout } from 'timers';
 
 @Component({
   components: {
@@ -60,25 +59,7 @@ export default class Terminal extends Vue {
   commands = {
     'ts-git': ({ _ }) => {
       return `You typed: "${_.join(' ')}"`;
-
-      // return new Promise(resolve => {
-      //   setTimeout(() => {
-      //     resolve(`You typed: "${_.join(' ')}"`);
-      //   }, 2000);
-      // });
     },
   };
 }
-
-const data = () => ({
-  commands: {
-    pokedex: ({ _ }) => {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve(`You typed: "${_.join(' ')}"`);
-        }, 2000);
-      });
-    },
-  },
-});
 </script>
