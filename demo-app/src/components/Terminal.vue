@@ -4,6 +4,13 @@
       <b>Welcome to ts-git!</b><br /><br />
       Give ts-git a spin by editing files on the right and running some git
       commands here
+
+      <br /><br />
+      <b>Note:</b> ts-git is under construction. In the meantime, check out the
+      source at
+      <a href="https://gitlab.com/nfriend/ts-git" target="_blank">
+        https://gitlab.com/nfriend/ts-git
+      </a>
     </p>
     <VueCommand
       :commands="commands"
