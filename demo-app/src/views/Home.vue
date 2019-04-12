@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex flex-column h-100">
     <Header />
-    <div class="d-flex flex-grow-1">
+    <div class="d-flex flex-grow-1 min-height-0">
       <WindowChrome class="flex-even ml-3 mr-3 mb-3">
         <Terminal />
       </WindowChrome>

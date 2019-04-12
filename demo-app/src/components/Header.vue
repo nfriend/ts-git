@@ -5,8 +5,9 @@
       <h1 class="display-4">ts-git</h1>
       <p class="lead">
         A naïve implementation of
-        <a href="https://git-scm.com/">git</a>, written in
-        <a href="https://www.typescriptlang.org/">TypeScript</a>.
+        <a href="https://git-scm.com/" target="_blank">git</a>, written in
+        <a href="https://www.typescriptlang.org/" target="_blank">TypeScript</a
+        >.
       </p>
       <p class="text-secondary">
         Source:

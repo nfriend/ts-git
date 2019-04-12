@@ -13,4 +13,8 @@
 .flex-even {
   flex: 1;
 }
+
+.min-height-0 {
+  min-height: 0;
+}
 </style>

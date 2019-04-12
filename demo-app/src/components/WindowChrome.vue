@@ -1,6 +1,6 @@
 <template>
   <div class="window d-flex flex-column">
-    <div class="titlebar">
+    <div class="titlebar flex-shrink-0">
       {{ title }}
     </div>
     <div class="content d-flex d-flex-column flex-grow-1">
@@ -30,6 +30,10 @@
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
   cursor: default;
+}
+
+.content {
+  overflow-y: scroll;
 }
 </style>
 
