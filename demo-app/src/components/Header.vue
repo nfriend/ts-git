@@ -1,6 +1,6 @@
 <template>
   <div
-    class="d-flex justify-content-center p-5 flex-column flex-sm-row align-items-center mt-5 mb-5 m-sm-0"
+    class="d-flex justify-content-center p-sm-5 flex-column flex-sm-row align-items-center mt-5 mb-5 m-sm-0"
   >
     <img
       id="ts-git-logo"
