@@ -9,7 +9,7 @@
       height="200"
       class="mb-3 mb-sm-0"
     />
-    <div class="d-flex flex-column ml-4 text-center text-sm-left">
+    <div class="d-flex flex-column ml-4 mr-4 text-center text-sm-left">
       <h1 class="display-4">ts-git</h1>
       <p class="lead">
         A naïve implementation of

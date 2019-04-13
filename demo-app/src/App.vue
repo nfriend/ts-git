@@ -7,7 +7,7 @@
 <style lang="scss">
 #app {
   background-color: #e9ecef;
-  height: 200%;
+  height: 1500px;
 }
 
 // https://stackoverflow.com/a/51775832/1063392
