@@ -6,7 +6,7 @@
         <Terminal />
       </WindowChrome>
       <WindowChrome class="flex-even ml-0 mr-3 mb-3">
-        <div>File editor will go here</div>
+        <FileEditor />
       </WindowChrome>
     </div>
   </div>
@@ -15,12 +15,14 @@
 <script>
 import { Component, Vue } from 'vue-property-decorator';
 import Terminal from '@/components/Terminal.vue';
+import FileEditor from '@/components/editor/FileEditor.vue';
 import Header from '@/components/Header.vue';
 import WindowChrome from '@/components/WindowChrome.vue';
 
 @Component({
   components: {
     Terminal,
+    FileEditor,
     Header,
     WindowChrome,
   },
