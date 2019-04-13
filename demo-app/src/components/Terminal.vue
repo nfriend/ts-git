@@ -60,6 +60,16 @@ export default class Terminal extends Vue {
     'ts-git': ({ _ }) => {
       return Promise.resolve(`You typed: "${_.join(' ')}"`);
     },
+    help: () => {
+      return 'Try "ts-git --help"';
+    },
+    async: async () => {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve('This was an async command!');
+        }, 1500);
+      });
+    },
   };
 }
 </script>
