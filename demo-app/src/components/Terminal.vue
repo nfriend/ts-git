@@ -47,8 +47,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import VueCommand from '@nathanfriend/vue-command';
-import '@nathanfriend/vue-command/dist/vue-command.css';
+import VueCommand from 'vue-command';
+import 'vue-command/dist/vue-command.css';
 
 @Component({
   components: {
