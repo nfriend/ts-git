@@ -1,7 +1,15 @@
 <template>
-  <div class="d-flex justify-content-center p-5">
-    <img id="ts-git-logo" src="../assets/ts-git.png" width="200" height="200" />
-    <div class="d-flex flex-column ml-4">
+  <div
+    class="d-flex justify-content-center p-5 flex-column flex-sm-row align-items-center mt-5 mb-5 m-sm-0"
+  >
+    <img
+      id="ts-git-logo"
+      src="../assets/ts-git.png"
+      width="200"
+      height="200"
+      class="mb-3 mb-sm-0"
+    />
+    <div class="d-flex flex-column ml-4 text-center text-sm-left">
       <h1 class="display-4">ts-git</h1>
       <p class="lead">
         A naïve implementation of

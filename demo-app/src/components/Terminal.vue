@@ -17,7 +17,7 @@
       :hide-bar="true"
       help-text='Try "ts-git --help"'
       :show-help="true"
-      prompt=">"
+      prompt="$"
       class="flex-even"
     />
   </div>
