@@ -47,8 +47,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import VueCommand from 'vue-command';
-import 'vue-command/dist/vue-command.css';
+import VueCommand from '@nathanfriend/vue-command';
+import '@nathanfriend/vue-command/dist/vue-command.css';
 
 @Component({
   components: {
@@ -58,7 +58,7 @@ import 'vue-command/dist/vue-command.css';
 export default class Terminal extends Vue {
   commands = {
     'ts-git': ({ _ }) => {
-      return `You typed: "${_.join(' ')}"`;
+      return Promise.resolve(`You typed: "${_.join(' ')}"`);
     },
   };
 }
