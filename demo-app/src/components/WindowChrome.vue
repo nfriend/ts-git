@@ -3,7 +3,10 @@
     <div class="titlebar flex-shrink-0">
       {{ title }}
     </div>
-    <div class="content d-flex d-flex-column flex-grow-1">
+    <div
+      class="content d-flex d-flex-column flex-grow-1"
+      :class="{ scrollable: scrollable }"
+    >
       <slot class="flex-grow-1"></slot>
     </div>
   </div>
@@ -33,7 +36,9 @@
 }
 
 .content {
-  overflow-y: scroll;
+  &.scrollable {
+    overflow-y: scroll;
+  }
 }
 </style>
 
@@ -46,6 +51,11 @@ import { Component, Vue } from 'vue-property-decorator';
       type: String,
       required: false,
       default: '',
+    },
+    scrollable: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   },
 })

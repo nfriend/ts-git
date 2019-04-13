@@ -1,6 +1,6 @@
 <template>
   <MonacoEditor
-    class="flex-grow-1 h-100"
+    class="flex-grow-1"
     v-model="code"
     :options="options"
     theme="vs-dark"
@@ -28,6 +28,7 @@ export default class FileEditor extends Vue {
 
   options = {
     fontSize: '16px',
+    automaticLayout: true,
   };
 }
 </script>

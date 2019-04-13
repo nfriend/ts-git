@@ -2,7 +2,7 @@
   <div class="d-flex flex-column h-100">
     <Header />
     <div class="d-flex flex-grow-1 min-height-0">
-      <WindowChrome class="flex-even ml-3 mr-3 mb-3">
+      <WindowChrome class="flex-even ml-3 mr-3 mb-3" :scrollable="true">
         <Terminal />
       </WindowChrome>
       <WindowChrome class="flex-even ml-0 mr-3 mb-3">
