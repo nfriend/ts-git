@@ -1,10 +1,11 @@
 <template>
-  <div class="flex-grow-1 h-100">
+  <div class="flex-grow-1 h-100 terminal-container">
     <p class="m-3 ml-5 mr-5 text-white text-monospace text-center">
       <b>Welcome to ts-git!</b><br /><br />
-      Give ts-git a spin by editing files on the right and running some git
-      commands here
-
+      Give ts-git a spin by editing files
+      <span class="d-none d-md-inline">on the right</span>
+      <span class="d-inline d-md-none">in the window below</span>
+      and running some git commands here
       <br /><br />
       <b>Note:</b> ts-git is under construction. In the meantime, check out the
       source at
@@ -24,22 +25,25 @@
 </template>
 
 <style lang="scss">
-.vue-command {
+.terminal-container {
   * {
     font-family: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
       'Courier New', monospace !important;
+    font-size: 14px !important;
   }
 
-  .term {
-    width: 100%;
-    height: 100%;
-    background: #1e1e1e;
-    border: none;
+  .vue-command {
+    .term {
+      width: 100%;
+      height: 100%;
+      background: #1e1e1e;
+      border: none;
 
-    .term-std {
-      min-height: 100%;
-      max-height: 100%;
-      overflow-y: scroll;
+      .term-std {
+        min-height: 100%;
+        max-height: 100%;
+        overflow-y: scroll;
+      }
     }
   }
 }

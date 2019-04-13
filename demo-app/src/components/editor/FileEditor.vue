@@ -27,7 +27,7 @@ export default class FileEditor extends Vue {
   ].join('\n');
 
   options = {
-    fontSize: '16px',
+    fontSize: '14px',
     automaticLayout: true,
   };
 }

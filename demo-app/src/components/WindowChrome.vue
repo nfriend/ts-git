@@ -22,7 +22,7 @@
 }
 
 .titlebar {
-  background: linear-gradient(top, #434346, #363739);
+  background: linear-gradient(to bottom, #434346, #363739);
   color: #b8b8bb;
   font-size: 10pt;
   line-height: 15px;
