@@ -1,20 +1,31 @@
 <template>
-  <MonacoEditor
-    class="flex-grow-1"
-    v-model="code"
-    :options="options"
-    theme="vs-dark"
-    language="javascript"
-  />
+  <div class="flex-grow-1 d-flex">
+    <Sidebar class="flex-shrink-0 editor-sidebar" />
+    <MonacoEditor
+      class="flex-grow-1"
+      v-model="code"
+      :options="options"
+      theme="vs-dark"
+      language="javascript"
+    />
+  </div>
 </template>
+
+<style lang="scss" scoped>
+.editor-sidebar {
+  width: 200px;
+}
+</style>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import MonacoEditor from 'vue-monaco';
+import Sidebar from './Sidebar.vue';
 
 @Component({
   components: {
     MonacoEditor,
+    Sidebar,
   },
 })
 export default class FileEditor extends Vue {

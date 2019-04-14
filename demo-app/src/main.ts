@@ -7,15 +7,13 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
-  faWrench,
-  faHardHat,
-  faExclamationTriangle,
+  faCaretDown,
+  faCaretRight,
+  faAlignLeft,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-// to use an icon in a Vue template:
-// <font-awesome-icon icon="exclamation-triangle" />
 
-library.add(faWrench, faHardHat, faExclamationTriangle);
+library.add(faCaretDown, faCaretRight, faAlignLeft);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
