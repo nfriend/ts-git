@@ -1,8 +1,6 @@
 <template>
   <div class="editor-container">
-    <SidebarItem name="folder-1" :isFolder="true" :isOpen="true" />
-    <SidebarItem name="folder-2" :isFolder="true" :isOpen="false" />
-    <SidebarItem name="file-1" :isFolder="false" :isOpen="true" />
+    <SidebarItem v-for="item in items" :item="item" />
   </div>
 </template>
 
@@ -14,12 +12,59 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import SidebarItem from './SidebarItem.vue';
+import SidebarItem, { FileSystemItem } from './SidebarItem.vue';
 
 @Component({
   components: {
     SidebarItem,
   },
 })
-export default class Sidebar extends Vue {}
+export default class Sidebar extends Vue {
+  items: FileSystemItem[] = [
+    {
+      name: 'folder-1',
+      isFolder: true,
+      isFolderOpen: true,
+      isSelected: false,
+      children: [
+        {
+          name: 'nested-folder-1',
+          isFolder: true,
+          isFolderOpen: true,
+          isSelected: false,
+          children: [
+            {
+              name: 'file-1',
+              isFolder: false,
+              isFolderOpen: false,
+              isSelected: false,
+              children: [],
+            },
+            {
+              name: 'file-2',
+              isFolder: false,
+              isFolderOpen: false,
+              isSelected: false,
+              children: [],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'folder-2',
+      isFolder: true,
+      isFolderOpen: true,
+      isSelected: false,
+      children: [],
+    },
+    {
+      name: 'file-1',
+      isFolder: false,
+      isFolderOpen: false,
+      isSelected: false,
+      children: [],
+    },
+  ];
+}
 </script>

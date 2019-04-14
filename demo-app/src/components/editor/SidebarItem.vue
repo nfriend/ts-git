@@ -1,16 +1,31 @@
 <template>
-  <div
-    class="sidebar-item-container d-flex align-items-center"
-    @click="isOpen = !isOpen"
-  >
-    <font-awesome-icon
-      class="item-icon"
-      :class="{ angled: isOpen }"
-      v-if="isFolder"
-      icon="caret-right"
-    />
-    <font-awesome-icon class="item-icon" v-if="isFile" icon="align-left" />
-    <span>{{ name }}</span>
+  <div>
+    <div
+      class="sidebar-item-container d-flex align-items-center"
+      :class="{ selected: item.isSelected }"
+      :style="indentStyle"
+      @click="clicked"
+    >
+      <font-awesome-icon
+        class="item-icon"
+        :class="{ angled: item.isFolderOpen }"
+        v-if="item.isFolder"
+        icon="caret-right"
+      />
+      <font-awesome-icon
+        class="item-icon"
+        v-if="!item.isFolder"
+        icon="align-left"
+      />
+      <span>{{ item.name }}</span>
+    </div>
+    <div class="children-container" v-if="item.isFolderOpen">
+      <SidebarItem
+        v-for="item in item.children"
+        :item="item"
+        :indent="indent + 1"
+      />
+    </div>
   </div>
 </template>
 
@@ -19,9 +34,15 @@
   color: #ccc;
   font-size: 14px;
   cursor: pointer;
+  user-select: none;
 
   &:hover {
     background: #2b2d2e;
+  }
+
+  &.selected {
+    background: #0b4770;
+    color: #fff;
   }
 
   .item-icon {
@@ -39,21 +60,37 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
+export interface FileSystemItem {
+  name: string;
+  isFolder: boolean;
+  isSelected: boolean;
+  isFolderOpen: boolean;
+  children: FileSystemItem[];
+}
+
 @Component({
   props: {
-    isFolder: {
-      type: Boolean,
+    item: {
+      type: Object,
+      required: true,
     },
-    isOpen: {
-      type: Boolean,
-    },
-    name: {
-      type: String,
+    indent: {
+      type: Number,
+      required: false,
+      default: 0,
     },
   },
   computed: {
-    isFile() {
-      return !this.isFolder;
+    indentStyle() {
+      return {
+        'padding-left': this.indent * 20 + 10 + 'px',
+      };
+    },
+  },
+  methods: {
+    clicked() {
+      this.item.isFolderOpen = !this.item.isFolderOpen;
+      this.item.isSelected = true;
     },
   },
 })
