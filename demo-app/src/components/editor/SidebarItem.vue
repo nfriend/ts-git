@@ -58,7 +58,7 @@
 </style>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 
 export interface FileSystemItem {
   name: string;
@@ -68,31 +68,20 @@ export interface FileSystemItem {
   children: FileSystemItem[];
 }
 
-@Component({
-  props: {
-    item: {
-      type: Object,
-      required: true,
-    },
-    indent: {
-      type: Number,
-      required: false,
-      default: 0,
-    },
-  },
-  computed: {
-    indentStyle() {
-      return {
-        'padding-left': this.indent * 20 + 10 + 'px',
-      };
-    },
-  },
-  methods: {
-    clicked() {
-      this.item.isFolderOpen = !this.item.isFolderOpen;
-      this.item.isSelected = true;
-    },
-  },
-})
-export default class SidebarItem extends Vue {}
+@Component
+export default class SidebarItem extends Vue {
+  @Prop({ type: Object, required: true }) readonly item: FileSystemItem;
+  @Prop({ type: Number, required: false, default: 0 }) readonly indent: number;
+
+  get indentStyle() {
+    return {
+      'padding-left': this.indent * 20 + 10 + 'px',
+    };
+  }
+
+  clicked() {
+    this.item.isFolderOpen = !this.item.isFolderOpen;
+    this.item.isSelected = true;
+  }
+}
 </script>
