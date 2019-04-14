@@ -2,7 +2,7 @@
   <div>
     <div
       class="sidebar-item-container d-flex align-items-center"
-      :class="{ selected: item.isSelected }"
+      :class="{ selected: isSelected }"
       :style="indentStyle"
       @click="clicked"
     >
@@ -22,10 +22,11 @@
     <div class="children-container" v-if="item.isFolderOpen">
       <SidebarItem
         v-for="item in item.children"
+        :key="item.path"
         :item="item"
         :indent="indent + 1"
-        :selected="selected"
-        @selected="itemSelected"
+        :selectedPath="selectedPath"
+        @itemSelected="itemSelected"
       />
     </div>
   </div>
@@ -64,6 +65,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 
 export interface FileSystemItem {
   name: string;
+  path: string;
   isFolder: boolean;
   isFolderOpen: boolean;
   children: FileSystemItem[];
@@ -71,9 +73,9 @@ export interface FileSystemItem {
 
 @Component
 export default class SidebarItem extends Vue {
-  @Prop({ type: Object, required: true }) readonly item: FileSystemItem;
-  @Prop({ required: true }) readonly selected: FileSystemItem;
-  @Prop({ type: Number, required: false, default: 0 }) readonly indent: number;
+  @Prop({ type: Object, required: true }) readonly item!: FileSystemItem;
+  @Prop({ type: String, required: true }) readonly selectedPath!: string;
+  @Prop({ type: Number, required: false, default: 0 }) readonly indent!: number;
 
   get indentStyle() {
     return {
@@ -81,13 +83,17 @@ export default class SidebarItem extends Vue {
     };
   }
 
+  get isSelected() {
+    return this.selectedPath === this.item.path;
+  }
+
   clicked() {
     this.item.isFolderOpen = !this.item.isFolderOpen;
-    this.$emit('selected', this.item);
+    this.$emit('itemSelected', this.item);
   }
 
   itemSelected(item) {
-    this.$emit('selected', item);
+    this.$emit('itemSelected', item);
   }
 }
 </script>

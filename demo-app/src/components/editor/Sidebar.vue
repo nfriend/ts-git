@@ -2,9 +2,10 @@
   <div class="editor-container">
     <SidebarItem
       v-for="item in items"
+      :key="item.path"
       :item="item"
-      :selected="selected"
-      @selected="itemSelected"
+      :selectedPath="selectedPath"
+      @itemSelected="itemSelected"
     />
   </div>
 </template>
@@ -25,25 +26,31 @@ import SidebarItem, { FileSystemItem } from './SidebarItem.vue';
   },
 })
 export default class Sidebar extends Vue {
+  selectedPath: string = '/';
+
   items: FileSystemItem[] = [
     {
       name: 'folder-1',
+      path: '/folder-1',
       isFolder: true,
       isFolderOpen: true,
       children: [
         {
           name: 'nested-folder-1',
+          path: '/folder-1/nested-folder-1',
           isFolder: true,
           isFolderOpen: true,
           children: [
             {
               name: 'file-1',
+              path: '/folder-1/nested-folder-1/file-1',
               isFolder: false,
               isFolderOpen: false,
               children: [],
             },
             {
               name: 'file-2',
+              path: '/folder-1/nested-folder-1/file-2',
               isFolder: false,
               isFolderOpen: false,
               children: [],
@@ -54,23 +61,22 @@ export default class Sidebar extends Vue {
     },
     {
       name: 'folder-2',
+      path: '/folder-2',
       isFolder: true,
       isFolderOpen: true,
       children: [],
     },
     {
       name: 'file-1',
+      path: '/file-1',
       isFolder: false,
       isFolderOpen: false,
       children: [],
     },
   ];
 
-  selected: FileSystemItem = this.items[0];
-
   itemSelected(item) {
-    console.log('itemSelected!', item);
-    this.selected = item;
+    this.selectedPath = item.path;
   }
 }
 </script>
