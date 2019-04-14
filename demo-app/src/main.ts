@@ -10,10 +10,11 @@ import {
   faCaretDown,
   faCaretRight,
   faAlignLeft,
+  faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-library.add(faCaretDown, faCaretRight, faAlignLeft);
+library.add(faCaretDown, faCaretRight, faAlignLeft, faTrash);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 

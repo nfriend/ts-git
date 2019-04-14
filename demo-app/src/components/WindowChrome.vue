@@ -43,21 +43,12 @@
 </style>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 
-@Component({
-  props: {
-    title: {
-      type: String,
-      required: false,
-      default: '',
-    },
-    scrollable: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
-  },
-})
-export default class WindowChrome extends Vue {}
+@Component
+export default class WindowChrome extends Vue {
+  @Prop({ type: String, required: false, default: '' }) readonly title!: string;
+  @Prop({ type: Boolean, required: false, default: false })
+  readonly scrollable!: boolean;
+}
 </script>

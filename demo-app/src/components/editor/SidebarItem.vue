@@ -17,7 +17,8 @@
         v-if="!item.isFolder"
         icon="align-left"
       />
-      <span>{{ item.name }}</span>
+      <span class="flex-grow-1">{{ item.name }}</span>
+      <font-awesome-icon class="item-icon delete-icon" icon="trash" />
     </div>
     <div class="children-container" v-if="item.isFolderOpen">
       <SidebarItem
@@ -41,6 +42,10 @@
 
   &:hover {
     background: #2b2d2e;
+
+    .delete-icon {
+      visibility: visible;
+    }
   }
 
   &.selected {
@@ -52,6 +57,10 @@
     width: 25px;
     font-size: 0.8em;
     transition: transform 0.15s ease-in-out;
+  }
+
+  .delete-icon {
+    visibility: hidden;
   }
 
   .angled {
