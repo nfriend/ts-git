@@ -1,6 +1,11 @@
 <template>
   <div class="editor-container">
-    <SidebarItem v-for="item in items" :item="item" />
+    <SidebarItem
+      v-for="item in items"
+      :item="item"
+      :selected="selected"
+      @selected="itemSelected"
+    />
   </div>
 </template>
 
@@ -25,26 +30,22 @@ export default class Sidebar extends Vue {
       name: 'folder-1',
       isFolder: true,
       isFolderOpen: true,
-      isSelected: false,
       children: [
         {
           name: 'nested-folder-1',
           isFolder: true,
           isFolderOpen: true,
-          isSelected: false,
           children: [
             {
               name: 'file-1',
               isFolder: false,
               isFolderOpen: false,
-              isSelected: false,
               children: [],
             },
             {
               name: 'file-2',
               isFolder: false,
               isFolderOpen: false,
-              isSelected: false,
               children: [],
             },
           ],
@@ -55,16 +56,21 @@ export default class Sidebar extends Vue {
       name: 'folder-2',
       isFolder: true,
       isFolderOpen: true,
-      isSelected: false,
       children: [],
     },
     {
       name: 'file-1',
       isFolder: false,
       isFolderOpen: false,
-      isSelected: false,
       children: [],
     },
   ];
+
+  selected: FileSystemItem = this.items[0];
+
+  itemSelected(item) {
+    console.log('itemSelected!', item);
+    this.selected = item;
+  }
 }
 </script>

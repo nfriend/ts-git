@@ -24,6 +24,8 @@
         v-for="item in item.children"
         :item="item"
         :indent="indent + 1"
+        :selected="selected"
+        @selected="itemSelected"
       />
     </div>
   </div>
@@ -63,7 +65,6 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 export interface FileSystemItem {
   name: string;
   isFolder: boolean;
-  isSelected: boolean;
   isFolderOpen: boolean;
   children: FileSystemItem[];
 }
@@ -71,6 +72,7 @@ export interface FileSystemItem {
 @Component
 export default class SidebarItem extends Vue {
   @Prop({ type: Object, required: true }) readonly item: FileSystemItem;
+  @Prop({ required: true }) readonly selected: FileSystemItem;
   @Prop({ type: Number, required: false, default: 0 }) readonly indent: number;
 
   get indentStyle() {
@@ -81,7 +83,11 @@ export default class SidebarItem extends Vue {
 
   clicked() {
     this.item.isFolderOpen = !this.item.isFolderOpen;
-    this.item.isSelected = true;
+    this.$emit('selected', this.item);
+  }
+
+  itemSelected(item) {
+    this.$emit('selected', item);
   }
 }
 </script>
