@@ -17,7 +17,15 @@ export class TsGit {
   constructor(fileSystemType: FileSystemType = 'FileSystem') {
     this.fsPromise = new Promise((resolve, reject) => {
       if (fileSystemType === 'LocalStorage') {
-        reject('LocalStorage file system is not yet implemented!');
+        browserfs.configure({ fs: 'LocalStorage', options: {} }, err => {
+          if (err) {
+            reject(err);
+          } else {
+            const localStorageFS: any = browserfs.BFSRequire('fs');
+            bluebird.promisifyAll(localStorageFS);
+            resolve(localStorageFS);
+          }
+        });
       } else if (fileSystemType === 'InMemory') {
         browserfs.configure({ fs: 'InMemory', options: {} }, err => {
           if (err) {

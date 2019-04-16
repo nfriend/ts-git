@@ -53,6 +53,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import VueCommand from 'vue-command';
 import 'vue-command/dist/vue-command.css';
+import { TsGit } from '@nathanfriend/ts-git';
 
 @Component({
   components: {
@@ -60,9 +61,15 @@ import 'vue-command/dist/vue-command.css';
   },
 })
 export default class Terminal extends Vue {
+  private tsGit!: TsGit;
+
+  beforeCreate() {
+    this.tsGit = new TsGit('LocalStorage');
+  }
+
   commands = {
-    'ts-git': ({ _ }) => {
-      return Promise.resolve(`You typed: "${_.join(' ')}"`);
+    'ts-git': async argv => {
+      return await this.processCommand(argv);
     },
     help: () => {
       return 'Try "ts-git --help"';
@@ -75,5 +82,17 @@ export default class Terminal extends Vue {
       });
     },
   };
+
+  private async processCommand(argv: any) {
+    const command = argv._[1];
+
+    if (!command || command === 'help') {
+      return 'TODO: print some help here.';
+    } else if (command === 'init') {
+      const cwd = argv._[2] || '/';
+      const result = await this.tsGit.init(cwd);
+      return result.message;
+    }
+  }
 }
 </script>

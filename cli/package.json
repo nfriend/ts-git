@@ -27,7 +27,7 @@
   },
   "homepage": "https://gitlab.com/nfriend/ts-git#readme",
   "dependencies": {
-    "@nathanfriend/ts-git": "^0.1.4",
+    "@nathanfriend/ts-git": "file:../lib",
     "@types/chalk": "^2.2.0",
     "@types/node": "^11.13.0",
     "@types/yargs": "^12.0.10",
