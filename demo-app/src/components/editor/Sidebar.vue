@@ -1,5 +1,26 @@
 <template>
-  <div class="editor-container">
+  <div class="sidebar-container">
+    <div
+      class="sidebar-controls d-flex flex-row-reverse align-items-stretch p-1 mb-2"
+    >
+      <span
+        class="control d-flex align-items-center justify-content-center"
+        v-b-tooltip.d350
+        title="Add a new folder"
+        @click="newFolderClicked"
+      >
+        <font-awesome-icon icon="folder-plus" />
+      </span>
+
+      <span
+        class="control d-flex align-items-center justify-content-center"
+        v-b-tooltip.d500
+        title="Add a new file"
+        @click="newFileClicked"
+      >
+        <font-awesome-icon icon="file-medical" />
+      </span>
+    </div>
     <SidebarItem
       v-for="item in items"
       :key="item.path"
@@ -11,7 +32,22 @@
 </template>
 
 <style lang="scss" scoped>
-.editor-container {
+.sidebar-container {
+  font-size: 14px;
+
+  .sidebar-controls {
+    color: #ccc;
+    background: #37373d;
+
+    .control {
+      width: 25px;
+      cursor: pointer;
+
+      &:hover {
+        color: white;
+      }
+    }
+  }
   background: #252526;
 }
 </style>
@@ -77,6 +113,15 @@ export default class Sidebar extends Vue {
 
   itemSelected(item) {
     this.selectedPath = item.path;
+    this.$emit('itemSelected', this.selectedPath);
+  }
+
+  newFolderClicked() {
+    this.$emit('newFolder');
+  }
+
+  newFileClicked() {
+    this.$emit('newFile');
   }
 }
 </script>

@@ -18,7 +18,14 @@
         icon="align-left"
       />
       <span class="flex-grow-1">{{ item.name }}</span>
-      <font-awesome-icon class="item-icon delete-icon" icon="trash" />
+      <span
+        @click.stop="deleteClicked"
+        v-b-tooltip.d500
+        :title="'Delete ' + item.name"
+        class="align-self-stretch d-flex align-items-center"
+      >
+        <font-awesome-icon class="item-icon delete-icon" icon="trash" />
+      </span>
     </div>
     <div class="children-container" v-if="item.isFolderOpen">
       <SidebarItem
@@ -99,6 +106,10 @@ export default class SidebarItem extends Vue {
   clicked() {
     this.item.isFolderOpen = !this.item.isFolderOpen;
     this.$emit('itemSelected', this.item);
+  }
+
+  deleteClicked() {
+    this.$emit('itemDeleted', this.item);
   }
 
   itemSelected(item) {
