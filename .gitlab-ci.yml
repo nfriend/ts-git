@@ -38,7 +38,7 @@ demo app build:
     - master
 
 pages:
-  stage: demo-app-deploy
+  stage: demo app deploy
   script:
     - cp -r dist ../public
   artifacts:
