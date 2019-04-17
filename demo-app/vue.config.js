@@ -1,4 +1,5 @@
 const MonocoEditorPlugin = require('monaco-editor-webpack-plugin');
+const CompressionWebpackPlugin = require('compression-webpack-plugin');
 
 module.exports = {
   configureWebpack: {
@@ -11,6 +12,8 @@ module.exports = {
         // Languages are loaded on demand at runtime
         languages: ['javascript', 'css', 'html'],
       }),
+
+      new CompressionWebpackPlugin(),
     ],
   },
 };
