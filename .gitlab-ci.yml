@@ -1,45 +1,14 @@
 image: node:8
 
-stages:
-  - lib install
-  - lib build
-  - demo app install
-  - demo app build
-  - demo app deploy
-
-lib install:
-  stage: lib install
+pages:
+  stage: deploy
   script:
     - cd lib
     - npm install
-  only:
-    - master
-
-lib build:
-  stage: lib build
-  script:
     - npm run build
-  only:
-    - master
-
-demo app install:
-  stage: demo app install
-  script:
     - cd ../demo-app
     - npm install
-  only:
-    - master
-
-demo app build:
-  stage: demo app build
-  script:
     - npm run build
-  only:
-    - master
-
-pages:
-  stage: demo app deploy
-  script:
     - cp -r dist ../public
   artifacts:
     paths:
