@@ -116,6 +116,29 @@ export default class Terminal extends Vue {
         ].join('\n'),
       );
     },
+    gitlab: () => {
+      return this.wrapOutput(`
+           '                        '
+          :s:                      :s:
+         'oso'                    'oso.
+         +sss+                    +sss+
+        :sssss:                  -sssss:
+       'ossssso'                'ossssso'
+       +sssssss+                +sssssss+
+      -ooooooooo-++++++++++++++-ooooooooo-
+     ':/+++++++++osssssssssssso+++++++++/:'
+     -///+++++++++ssssssssssss+++++++++///-
+    .//////+++++++osssssssssso+++++++//////.
+    :///////+++++++osssssssso+++++++///////:
+     .:///////++++++ssssssss++++++///////:.'
+       '-://///+++++osssssso+++++/////:-'
+          '-:////++++osssso++++////:-'
+             .-:///++osssso++///:-.
+               '.://++osso++//:.'
+                  '-:/+oo+/:-'
+                     '-++-'
+`);
+    },
   };
 
   private wrapOutput(output: string, isError = false) {
