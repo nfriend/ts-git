@@ -1,1 +1,4 @@
 /temp
+
+# These cause the build to fail for some reason
+package-lock.json
