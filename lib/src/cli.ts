@@ -1,14 +1,13 @@
 #!/usr/bin/env node
 import * as yargsParser from 'yargs-parser';
 import chalk from 'chalk';
-import { CommandParser } from './CommandParser';
 import { TsGit } from './TsGit';
 
 const argv = yargsParser(process.argv.slice(1));
 const tsGit = new TsGit();
 
 (async () => {
-  const result = await CommandParser.parse(tsGit, argv);
+  const result = await tsGit.processArgv(argv);
 
   if (result.success) {
     if (result.message) {

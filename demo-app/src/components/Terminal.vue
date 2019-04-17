@@ -48,11 +48,11 @@
   }
 
   .output {
-    white-space: pre;
-  }
+    white-space: pre-wrap;
 
-  .error-output {
-    color: #f1625c;
+    &.error-output {
+      color: #f1625c;
+    }
   }
 }
 </style>
@@ -63,6 +63,7 @@ import VueCommand from 'vue-command';
 import 'vue-command/dist/vue-command.css';
 import { TsGit } from '@nathanfriend/ts-git';
 import escape from 'lodash/escape';
+import * as path from 'path';
 
 @Component({
   components: {
@@ -80,35 +81,48 @@ export default class Terminal extends Vue {
     'ts-git': async argv => {
       let result = await this.tsGit.processArgv(argv);
 
-      if (result.message) {
-        // sanitize the message for HTML usage
-        result.message = escape(result.message);
-
-        result.message = `<span class="output">${result.message}</span>`;
-      }
-
       if (result.success) {
         if (result.message) {
-          return result.message;
+          return this.wrapOutput(result.message);
         }
       } else {
         if (result.message) {
-          return `<span class="error-output">${result.message}</span>`;
+          return this.wrapOutput(result.message, true);
         } else {
-          return `<span class="error-output ">An unexpected error occurred :(</span>`;
+          return this.wrapOutput(
+            'this.wrapOutput(result.message, true);',
+            true,
+          );
         }
       }
     },
-    help: () => {
-      return 'Try "ts-git --help"';
+    reset: async () => {
+      localStorage.clear();
+      this.tsGit = new TsGit('LocalStorage');
+
+      return this.wrapOutput(
+        'Successfully reset the filesystem. All files and folders have been deleted.',
+      );
     },
-    async: async () => {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve('This was an async command!');
-        }, 1500);
-      });
+    git: () => {
+      return this.wrapOutput(`Did you mean "ts-git"? :)`);
+    },
+    help: () => {
+      return this.wrapOutput(
+        [
+          `To get help on how to use ts-git, run "ts-git --help"`,
+          ``,
+          `To reset the filesystem, run "reset"`,
+        ].join('\n'),
+      );
     },
   };
+
+  private wrapOutput(output: string, isError = false) {
+    output = escape(output);
+    return `<span class="output ${
+      isError ? 'error-output' : ''
+    }">${output}</span>`;
+  }
 }
 </script>

@@ -5,15 +5,15 @@ import { initCommand } from './commands/init';
 import { CommandResult } from './commands/CommandResult';
 import { catFileCommand } from './commands/cat-file';
 import { GitObjectType } from './models/GitObjectType';
-import * as fs from 'fs';
+import * as nodeFsModule from 'fs';
 import { versionCommand } from './commands/version';
-import { CommandParser } from './CommandParser';
-bluebird.promisifyAll(fs);
+import { processArgvCommand } from './commands/process-argv';
+bluebird.promisifyAll(nodeFsModule);
 
 export type FileSystemType = 'InMemory' | 'LocalStorage' | 'FileSystem';
 
 export class TsGit {
-  private fsPromise: Promise<typeof fs>;
+  fsPromise: Promise<typeof nodeFsModule>;
 
   constructor(fileSystemType: FileSystemType = 'FileSystem') {
     this.fsPromise = new Promise((resolve, reject) => {
@@ -38,7 +38,7 @@ export class TsGit {
           }
         });
       } else if (fileSystemType === 'FileSystem') {
-        resolve(fs);
+        resolve(nodeFsModule);
       } else {
         reject(
           `Unknown file system type: "${fileSystemType}". ` +
@@ -99,7 +99,7 @@ export class TsGit {
 
   async processArgv(argv: yargsParser.Arguments): Promise<CommandResult> {
     try {
-      return await CommandParser.parse(this, argv);
+      return await processArgvCommand(this, argv);
     } catch (err) {
       return this.getUexpectedResult(err);
     }
