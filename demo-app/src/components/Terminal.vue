@@ -46,6 +46,14 @@
       }
     }
   }
+
+  .output {
+    white-space: pre;
+  }
+
+  .error-output {
+    color: #f1625c;
+  }
 }
 </style>
 
@@ -54,6 +62,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import VueCommand from 'vue-command';
 import 'vue-command/dist/vue-command.css';
 import { TsGit } from '@nathanfriend/ts-git';
+import escape from 'lodash/escape';
 
 @Component({
   components: {
@@ -69,7 +78,26 @@ export default class Terminal extends Vue {
 
   commands = {
     'ts-git': async argv => {
-      return await this.processCommand(argv);
+      let result = await this.tsGit.processArgv(argv);
+
+      if (result.message) {
+        // sanitize the message for HTML usage
+        result.message = escape(result.message);
+
+        result.message = `<span class="output">${result.message}</span>`;
+      }
+
+      if (result.success) {
+        if (result.message) {
+          return result.message;
+        }
+      } else {
+        if (result.message) {
+          return `<span class="error-output">${result.message}</span>`;
+        } else {
+          return `<span class="error-output ">An unexpected error occurred :(</span>`;
+        }
+      }
     },
     help: () => {
       return 'Try "ts-git --help"';
@@ -82,17 +110,5 @@ export default class Terminal extends Vue {
       });
     },
   };
-
-  private async processCommand(argv: any) {
-    const command = argv._[1];
-
-    if (!command || command === 'help') {
-      return 'TODO: print some help here.';
-    } else if (command === 'init') {
-      const cwd = argv._[2] || '/';
-      const result = await this.tsGit.init(cwd);
-      return result.message;
-    }
-  }
 }
 </script>

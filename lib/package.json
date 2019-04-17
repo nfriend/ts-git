@@ -3,6 +3,9 @@
   "version": "0.1.4",
   "description": "A naïve implementation of git, written in TypeScript. Built to help me understand how git works under the hood.",
   "main": "dist/src/index.js",
+  "bin": {
+    "ts-git": "dist/src/cli.js"
+  },
   "types": "dist/src/index.d.ts",
   "scripts": {
     "build": "tsc",
@@ -37,9 +40,11 @@
     "@types/filesystem": "0.0.29",
     "@types/fs-extra": "^5.0.5",
     "@types/node": "~7.0",
+    "@types/yargs-parser": "^13.0.0",
     "bluebird": "^3.5.4",
     "browserfs": "^1.4.3",
     "fs-extra": "^7.0.1",
-    "js-sha1": "^0.6.0"
+    "js-sha1": "^0.6.0",
+    "yargs-parser": "^13.0.0"
   }
 }

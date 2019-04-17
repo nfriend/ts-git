@@ -8,7 +8,7 @@ This implementation is heavily based on the excellent [Write yourself a Git!](ht
 
 Please don't actually use `ts-git` for anything serious :joy:.
 
-This repo contains the source the [`ts-git` library](./lib), the [`ts-git-cli` CLI wrapper](./cli), and the [`ts-git` demo app](./demo-app).
+This repo contains the source the [`ts-git` library](./lib) and the [`ts-git` demo app](./demo-app).
 
 ## Usage
 
@@ -39,16 +39,16 @@ More complete usage details can be found in the [`lib`](./lib) directory in this
 
 ### Command line usage
 
-First, install the `ts-git-cli` module globally:
+First, install the `ts-git` module globally:
 
 ```bash
-npm install -g @nathanfriend/ts-git-cli
+npm install -g @nathanfriend/ts-git
 ```
 
-Then use the `ts-git-cli` command as a drop-in replacement for `git`:
+Then use the `ts-git` command as a drop-in replacement for `git`:
 
 ```bash
-ts-git-cli --help
+ts-git init
 ```
 
-More complete usage details can be found in the [`cli`](./cli) directory of this repo.
+To the see the list of available commands, run `ts-git --help`.

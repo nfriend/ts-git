@@ -1,12 +1,13 @@
-import { initCommand } from './commands/init';
 import * as browserfs from 'browserfs';
 import * as bluebird from 'bluebird';
+import * as yargsParser from 'yargs-parser';
+import { initCommand } from './commands/init';
 import { CommandResult } from './commands/CommandResult';
 import { catFileCommand } from './commands/cat-file';
 import { GitObjectType } from './models/GitObjectType';
-
-// TODO: make sure this works in the browser
 import * as fs from 'fs';
+import { versionCommand } from './commands/version';
+import { CommandParser } from './CommandParser';
 bluebird.promisifyAll(fs);
 
 export type FileSystemType = 'InMemory' | 'LocalStorage' | 'FileSystem';
@@ -83,6 +84,22 @@ export class TsGit {
     try {
       const fs = await this.fsPromise;
       return await catFileCommand(fs, cwd, type, object);
+    } catch (err) {
+      return this.getUexpectedResult(err);
+    }
+  }
+
+  async version(): Promise<CommandResult> {
+    try {
+      return await versionCommand();
+    } catch (err) {
+      return this.getUexpectedResult(err);
+    }
+  }
+
+  async processArgv(argv: yargsParser.Arguments): Promise<CommandResult> {
+    try {
+      return await CommandParser.parse(this, argv);
     } catch (err) {
       return this.getUexpectedResult(err);
     }
