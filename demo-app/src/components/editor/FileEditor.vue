@@ -22,13 +22,12 @@
 </style>
 
 <script lang="ts">
-import * as browserfs from 'browserfs';
-import * as bluebird from 'bluebird';
 import { Component, Vue } from 'vue-property-decorator';
 import MonacoEditor from 'vue-monaco';
 import Sidebar from './Sidebar.vue';
 import { Stats } from 'fs';
 import * as path from 'path';
+import { BrowserFSService } from '../../services/BrowserFS.service';
 
 export interface FileSystemItem {
   name: string;
@@ -45,23 +44,7 @@ export interface FileSystemItem {
   },
 })
 export default class FileEditor extends Vue {
-  private fsPromise!: Promise<any>;
-
   private selectedPath!: string;
-
-  beforeCreate() {
-    this.fsPromise = new Promise((resolve, reject) => {
-      browserfs.configure({ fs: 'LocalStorage', options: {} }, err => {
-        if (err) {
-          reject(err);
-        } else {
-          const localStorageFS: any = browserfs.BFSRequire('fs');
-          bluebird.promisifyAll(localStorageFS);
-          resolve(localStorageFS);
-        }
-      });
-    });
-  }
 
   mounted() {
     this.updateFileSystem();
@@ -90,7 +73,7 @@ export default class FileEditor extends Vue {
   }
 
   async updateFileSystem() {
-    const fs = await this.fsPromise;
+    const fs = await BrowserFSService.fsPromise;
     this.filesAndFolders = await this.getDirectoryContents('/');
     await this.updateEditor();
   }
@@ -98,7 +81,7 @@ export default class FileEditor extends Vue {
   private async getDirectoryContents(
     directory: string,
   ): Promise<FileSystemItem[]> {
-    const fs = await this.fsPromise;
+    const fs = await BrowserFSService.fsPromise;
 
     const filesAndFolders: FileSystemItem[] = [];
     const contents = await fs.readdirAsync(directory);
@@ -120,7 +103,7 @@ export default class FileEditor extends Vue {
   }
 
   private async getFileContents(filePath: string): Promise<string> {
-    const fs = await this.fsPromise;
+    const fs = await BrowserFSService.fsPromise;
 
     try {
       return await fs.readFileAsync(filePath, 'utf8');
@@ -130,7 +113,7 @@ export default class FileEditor extends Vue {
   }
 
   private async updateEditor() {
-    const fs = await this.fsPromise;
+    const fs = await BrowserFSService.fsPromise;
     try {
       const isDirectory = (await fs.lstatAsync(
         this.selectedPath,

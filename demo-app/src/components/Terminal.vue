@@ -58,12 +58,13 @@
 </style>
 
 <script lang="ts">
+import * as path from 'path';
 import { Component, Vue } from 'vue-property-decorator';
 import VueCommand from 'vue-command';
-import 'vue-command/dist/vue-command.css';
-import { TsGit } from '@nathanfriend/ts-git';
 import escape from 'lodash/escape';
-import * as path from 'path';
+import { TsGit } from '@nathanfriend/ts-git';
+import 'vue-command/dist/vue-command.css';
+import { LocalStorageInitializationService } from '../services/LocalStorageInitialization.service';
 
 @Component({
   components: {
@@ -103,10 +104,22 @@ export default class Terminal extends Vue {
       localStorage.clear();
       this.tsGit = new TsGit('LocalStorage');
 
+      await LocalStorageInitializationService.initializeDemoFileSystem(true);
+
       this.emitEvent();
 
       return this.wrapOutput(
-        'Successfully reset the filesystem. All files and folders have been deleted.',
+        'Successfully reset the filesystem. The demo filesystem has been restored.',
+      );
+    },
+    clear: async () => {
+      localStorage.clear();
+      this.tsGit = new TsGit('LocalStorage');
+
+      this.emitEvent();
+
+      return this.wrapOutput(
+        'Successfully cleared the filesystem. All files and folders have been deleted.',
       );
     },
     git: () => {
@@ -117,7 +130,9 @@ export default class Terminal extends Vue {
         [
           `To get help on how to use ts-git, run "ts-git --help"`,
           ``,
-          `To reset the filesystem, run "reset"`,
+          `To do a "factory reset" on the filesystem and restore the demo filesystem, run "reset"`,
+          ``,
+          `To clear the filesystem completely, run "clear"`,
         ].join('\n'),
       );
     },
