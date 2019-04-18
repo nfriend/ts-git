@@ -16,7 +16,10 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
+
+    // works around an TypeScript error in browserfs
+    "skipLibCheck": true
   },
   "include": [
     "src/**/*.ts",

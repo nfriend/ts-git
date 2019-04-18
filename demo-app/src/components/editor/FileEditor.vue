@@ -47,7 +47,7 @@ export interface FileSystemItem {
 export default class FileEditor extends Vue {
   private fsPromise!: Promise<any>;
 
-  private selectedPath: string;
+  private selectedPath!: string;
 
   beforeCreate() {
     this.fsPromise = new Promise((resolve, reject) => {
