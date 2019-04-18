@@ -1,5 +1,6 @@
 import { BrowserFSService } from './BrowserFS.service';
 import * as path from 'path';
+import { demoFiles, demoDirs } from './demo-files';
 
 export class LocalStorageService {
   private static INIT_KEY: string = 'ts-git:has-demo-been-initialized';
@@ -16,22 +17,14 @@ export class LocalStorageService {
     if (force || !localStorage.getItem(this.INIT_KEY)) {
       const rootDir = '/';
 
-      const dirsToCreate = ['src', 'src/views', 'src/styles', 'src/scripts'];
-
-      const filesToCreate = {
-        'src/views/index.html': '<h1>Hello, world!</h1>',
-        'src/styles/app.css': '.hello-world { background: red; }',
-        'src/scripts/app.js': `console.log('hello, world!')`,
-      };
-
-      for (const dir of dirsToCreate) {
+      for (const dir of demoDirs) {
         await fs.mkdirAsync(path.join(rootDir, dir));
       }
 
-      for (const file in filesToCreate) {
+      for (const file in demoFiles) {
         await fs.appendFileAsync(
           path.join(rootDir, file),
-          filesToCreate[file],
+          demoFiles[file],
           'utf8',
         );
       }

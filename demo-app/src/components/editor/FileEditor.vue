@@ -77,6 +77,7 @@ export default class FileEditor extends Vue {
   async updateFileSystem() {
     const fs = await BrowserFSService.fsPromise;
     this.filesAndFolders = await this.getDirectoryContents('/');
+    this.sortFileSystemItems(this.filesAndFolders);
     await this.updateEditor();
   }
 
@@ -114,6 +115,34 @@ export default class FileEditor extends Vue {
     }
   }
 
+  private sorter(a: FileSystemItem, b: FileSystemItem) {
+    if (a.isFolder && !b.isFolder) {
+      return -1;
+    } else if (!a.isFolder && b.isFolder) {
+      return 1;
+    } else {
+      const aName = a.name.toLowerCase();
+      const bName = b.name.toLowerCase();
+      if (aName < bName) {
+        return -1;
+      }
+      if (aName > bName) {
+        return 1;
+      }
+
+      return 0;
+    }
+  }
+
+  private sortFileSystemItems(items: FileSystemItem[]) {
+    items.sort(this.sorter);
+    for (const item of items) {
+      if (item.isFolder) {
+        this.sortFileSystemItems(item.children);
+      }
+    }
+  }
+
   private async updateEditor() {
     const fs = await BrowserFSService.fsPromise;
     try {
@@ -123,10 +152,18 @@ export default class FileEditor extends Vue {
       if (!isDirectory) {
         if (/.js$/i.test(this.selectedPath)) {
           this.language = 'javascript';
+        } else if (/.ts$/i.test(this.selectedPath)) {
+          this.language = 'typescript';
+        } else if (/.json$/i.test(this.selectedPath)) {
+          this.language = 'json';
         } else if (/.css$/i.test(this.selectedPath)) {
           this.language = 'css';
         } else if (/.html?$/i.test(this.selectedPath)) {
           this.language = 'html';
+        } else if (/.md?$/i.test(this.selectedPath)) {
+          this.language = 'markdown';
+        } else if (/.yml?$/i.test(this.selectedPath)) {
+          this.language = 'yaml';
         } else if (/.git\/description$/i.test(this.selectedPath)) {
           this.language = 'ini';
         } else {
