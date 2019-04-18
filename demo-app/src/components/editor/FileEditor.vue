@@ -131,24 +131,23 @@ export default class FileEditor extends Vue {
 
   private async updateEditor() {
     const fs = await this.fsPromise;
-
-    if (/.js$/i.test(this.selectedPath)) {
-      this.language = 'javascript';
-    } else if (/.css$/i.test(this.selectedPath)) {
-      this.language = 'css';
-    } else if (/.html?$/i.test(this.selectedPath)) {
-      this.language = 'html';
-    } else if (/.git\/description$/i.test(this.selectedPath)) {
-      this.language = 'ini';
-    } else {
-      this.language = '';
-    }
-
     try {
       const isDirectory = (await fs.lstatAsync(
         this.selectedPath,
       )).isDirectory();
       if (!isDirectory) {
+        if (/.js$/i.test(this.selectedPath)) {
+          this.language = 'javascript';
+        } else if (/.css$/i.test(this.selectedPath)) {
+          this.language = 'css';
+        } else if (/.html?$/i.test(this.selectedPath)) {
+          this.language = 'html';
+        } else if (/.git\/description$/i.test(this.selectedPath)) {
+          this.language = 'ini';
+        } else {
+          this.language = '';
+        }
+
         this.code = await this.getFileContents(this.selectedPath);
       }
     } catch (err) {
