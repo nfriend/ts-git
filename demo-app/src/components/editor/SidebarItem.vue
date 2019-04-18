@@ -80,7 +80,7 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { FileSystemItem } from './FileEditor.vue';
 
-@Component
+@Component({ name: 'SidebarItem' })
 export default class SidebarItem extends Vue {
   @Prop({ type: Object, required: true }) readonly item!: FileSystemItem;
   @Prop({ type: String, required: true }) readonly selectedPath!: string;
