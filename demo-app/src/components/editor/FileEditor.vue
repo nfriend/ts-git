@@ -28,6 +28,7 @@ import Sidebar from './Sidebar.vue';
 import { Stats } from 'fs';
 import * as path from 'path';
 import { BrowserFSService } from '../../services/BrowserFS.service';
+import { LocalStorageService } from '../../services/LocalStorage.service';
 
 export interface FileSystemItem {
   name: string;
@@ -46,7 +47,8 @@ export interface FileSystemItem {
 export default class FileEditor extends Vue {
   private selectedPath!: string;
 
-  mounted() {
+  async mounted() {
+    await LocalStorageService.initializeDemoFileSystem();
     this.updateFileSystem();
   }
 

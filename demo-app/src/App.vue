@@ -32,16 +32,3 @@
   }
 }
 </style>
-
-<script lang="ts">
-import Vue from 'vue';
-import { Component } from 'vue-property-decorator';
-import { LocalStorageInitializationService } from './services/LocalStorageInitialization.service';
-
-@Component
-export default class FileEditor extends Vue {
-  beforeCreate() {
-    LocalStorageInitializationService.initializeDemoFileSystem();
-  }
-}
-</script>

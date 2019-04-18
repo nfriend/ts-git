@@ -1,7 +1,7 @@
 import { BrowserFSService } from './BrowserFS.service';
 import * as path from 'path';
 
-export class LocalStorageInitializationService {
+export class LocalStorageService {
   private static INIT_KEY: string = 'ts-git:has-demo-been-initialized';
 
   /**
@@ -37,6 +37,43 @@ export class LocalStorageInitializationService {
       }
 
       localStorage.setItem(this.INIT_KEY, 'yes');
+    }
+  }
+
+  /**
+   * Resets the file system back to its initial demo state
+   */
+  static async resetFileSystem() {
+    await this.clearFileSystem();
+    await this.initializeDemoFileSystem(true);
+  }
+
+  /**
+   * Deletes all files and folders in the file system
+   * (Except for the root folder)
+   */
+  static async clearFileSystem() {
+    await await this.deleteDirectoryContents('/');
+  }
+
+  /**
+   * Recursively deletes all files and folders inside a directory
+   * @param directory The directory whose contents will be deleted
+   */
+  private static async deleteDirectoryContents(directory: string) {
+    const fs = await BrowserFSService.fsPromise;
+
+    const contents = await fs.readdirAsync(directory);
+
+    for (const item of contents) {
+      const itemPath = path.join(directory, item);
+      const isDirectory = (await fs.lstatSync(itemPath)).isDirectory();
+      if (isDirectory) {
+        await this.deleteDirectoryContents(itemPath);
+        await fs.rmdirAsync(itemPath);
+      } else {
+        await fs.unlinkAsync(itemPath);
+      }
     }
   }
 }

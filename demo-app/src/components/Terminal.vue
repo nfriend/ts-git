@@ -64,7 +64,7 @@ import VueCommand from 'vue-command';
 import escape from 'lodash/escape';
 import { TsGit } from '@nathanfriend/ts-git';
 import 'vue-command/dist/vue-command.css';
-import { LocalStorageInitializationService } from '../services/LocalStorageInitialization.service';
+import { LocalStorageService } from '../services/LocalStorage.service';
 
 @Component({
   components: {
@@ -101,23 +101,15 @@ export default class Terminal extends Vue {
       }
     },
     reset: async () => {
-      localStorage.clear();
-      this.tsGit = new TsGit('LocalStorage');
-
-      await LocalStorageInitializationService.initializeDemoFileSystem(true);
-
+      await LocalStorageService.resetFileSystem();
       this.emitEvent();
-
       return this.wrapOutput(
         'Successfully reset the filesystem. The demo filesystem has been restored.',
       );
     },
     clear: async () => {
-      localStorage.clear();
-      this.tsGit = new TsGit('LocalStorage');
-
+      await LocalStorageService.clearFileSystem();
       this.emitEvent();
-
       return this.wrapOutput(
         'Successfully cleared the filesystem. All files and folders have been deleted.',
       );
