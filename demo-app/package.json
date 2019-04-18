@@ -33,6 +33,7 @@
     "@types/lodash": "^4.14.123",
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.0-rc.16",
+    "browserfs": "^1.4.3",
     "core-js": "^2.6.5",
     "i": "^0.3.6",
     "lodash": "^4.17.11",

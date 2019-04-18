@@ -77,9 +77,15 @@ export default class Terminal extends Vue {
     this.tsGit = new TsGit('LocalStorage');
   }
 
+  emitEvent() {
+    this.$emit('fileSystemChanged');
+  }
+
   commands = {
     'ts-git': async argv => {
       let result = await this.tsGit.processArgv(argv);
+
+      this.emitEvent();
 
       if (result.success) {
         if (result.message) {
@@ -89,16 +95,15 @@ export default class Terminal extends Vue {
         if (result.message) {
           return this.wrapOutput(result.message, true);
         } else {
-          return this.wrapOutput(
-            'this.wrapOutput(result.message, true);',
-            true,
-          );
+          return this.wrapOutput('An unexpected error occurred :(', true);
         }
       }
     },
     reset: async () => {
       localStorage.clear();
       this.tsGit = new TsGit('LocalStorage');
+
+      this.emitEvent();
 
       return this.wrapOutput(
         'Successfully reset the filesystem. All files and folders have been deleted.',

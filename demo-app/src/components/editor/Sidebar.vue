@@ -22,7 +22,7 @@
       </span>
     </div>
     <SidebarItem
-      v-for="item in items"
+      v-for="item in filesAndFolders"
       :key="item.path"
       :item="item"
       :selectedPath="selectedPath"
@@ -53,8 +53,9 @@
 </style>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import SidebarItem, { FileSystemItem } from './SidebarItem.vue';
+import { Component, Vue, Prop } from 'vue-property-decorator';
+import SidebarItem from './SidebarItem.vue';
+import { FileSystemItem } from './FileEditor.vue';
 
 @Component({
   components: {
@@ -62,54 +63,10 @@ import SidebarItem, { FileSystemItem } from './SidebarItem.vue';
   },
 })
 export default class Sidebar extends Vue {
-  selectedPath: string = '/';
+  @Prop({ type: Array, required: true })
+  readonly filesAndFolders!: FileSystemItem[];
 
-  items: FileSystemItem[] = [
-    {
-      name: 'folder-1',
-      path: '/folder-1',
-      isFolder: true,
-      isFolderOpen: true,
-      children: [
-        {
-          name: 'nested-folder-1',
-          path: '/folder-1/nested-folder-1',
-          isFolder: true,
-          isFolderOpen: true,
-          children: [
-            {
-              name: 'file-1',
-              path: '/folder-1/nested-folder-1/file-1',
-              isFolder: false,
-              isFolderOpen: false,
-              children: [],
-            },
-            {
-              name: 'file-2',
-              path: '/folder-1/nested-folder-1/file-2',
-              isFolder: false,
-              isFolderOpen: false,
-              children: [],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      name: 'folder-2',
-      path: '/folder-2',
-      isFolder: true,
-      isFolderOpen: true,
-      children: [],
-    },
-    {
-      name: 'file-1',
-      path: '/file-1',
-      isFolder: false,
-      isFolderOpen: false,
-      children: [],
-    },
-  ];
+  selectedPath: string = '/';
 
   itemSelected(item) {
     this.selectedPath = item.path;

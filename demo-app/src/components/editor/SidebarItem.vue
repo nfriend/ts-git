@@ -78,14 +78,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-
-export interface FileSystemItem {
-  name: string;
-  path: string;
-  isFolder: boolean;
-  isFolderOpen: boolean;
-  children: FileSystemItem[];
-}
+import { FileSystemItem } from './FileEditor.vue';
 
 @Component
 export default class SidebarItem extends Vue {
