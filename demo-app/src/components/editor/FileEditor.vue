@@ -4,6 +4,8 @@
       class="flex-shrink-0 editor-sidebar"
       :filesAndFolders="filesAndFolders"
       @itemSelected="itemSelected"
+      @newFolder="createNewFolder"
+      @newFile="createNewFile"
     />
     <MonacoEditor
       class="flex-grow-1"
@@ -68,6 +70,14 @@ export default class FileEditor extends Vue {
     const fs = await BrowserFSService.fsPromise;
     this.filesAndFolders = await FileSystemService.getDirectoryContents('/');
     await this.updateEditor();
+  }
+
+  createNewFile() {
+    console.log('new file clicked!');
+  }
+
+  createNewFolder() {
+    console.log('new folder clicked!');
   }
 
   private extensionToLanguageMap = [
