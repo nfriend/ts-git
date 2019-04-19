@@ -55,7 +55,7 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import SidebarItem from './SidebarItem.vue';
-import { FileSystemItem } from './FileEditor.vue';
+import { FileSystemItem } from '../../services/FileSystem.service';
 
 @Component({
   components: {

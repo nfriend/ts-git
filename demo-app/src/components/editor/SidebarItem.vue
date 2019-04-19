@@ -20,7 +20,7 @@
       <span
         v-if="!isEditing"
         class="item-name flex-grow-1"
-        @keydown.enter="onNameEnterPressed"
+        @keydown.enter="onNameEnterDown"
         tabindex="0"
         >{{ item.name }}</span
       >
@@ -29,9 +29,10 @@
         ref="editInput"
         class="d-flex flex-grow-1 edit-item-name-input p-0"
         style="min-width: 0"
-        v-model="item.name"
+        v-model="proposedName"
         @blur="onEditInputBlur"
-        @keydown.enter="onEditEnterPressed"
+        @keydown.enter="onInputEnterDown"
+        @keydown.esc="onInputEscDown"
       />
       <span
         @click.stop="deleteClicked"
@@ -109,15 +110,46 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { FileSystemItem } from './FileEditor.vue';
+import { FileSystemItem } from '../../services/FileSystem.service';
 
 @Component({ name: 'SidebarItem' })
 export default class SidebarItem extends Vue {
-  @Prop({ type: Object, required: true }) readonly item!: FileSystemItem;
-  @Prop({ type: String, required: true }) readonly selectedPath!: string;
-  @Prop({ type: Number, required: false, default: 0 }) readonly indent!: number;
+  @Prop({
+    type: Object,
+    required: true,
+  })
+  readonly item!: FileSystemItem;
+
+  @Prop({
+    type: String,
+    required: true,
+  })
+  readonly selectedPath!: string;
+
+  @Prop({
+    type: Number,
+    required: false,
+    default: 0,
+  })
+  readonly indent!: number;
+
+  @Prop({
+    type: Boolean,
+    required: false,
+    default: false,
+  })
+  readonly isNew!: number;
+
+  mounted() {
+    if (this.isNew) {
+      this.isEditing = true;
+    }
+  }
 
   isEditing: boolean = false;
+  proposedName: string = '';
+
+  private cancelEdit = false;
 
   get indentStyle() {
     return {
@@ -142,7 +174,8 @@ export default class SidebarItem extends Vue {
     this.$emit('itemSelected', item);
   }
 
-  onNameEnterPressed() {
+  onNameEnterDown() {
+    this.proposedName = this.item.name;
     this.isEditing = true;
 
     Vue.nextTick().then(() => {
@@ -152,11 +185,22 @@ export default class SidebarItem extends Vue {
     });
   }
 
-  onEditEnterPressed() {
+  onInputEnterDown() {
+    this.item.name = this.proposedName;
+    this.isEditing = false;
+  }
+
+  onInputEscDown() {
+    this.cancelEdit = true;
     this.isEditing = false;
   }
 
   onEditInputBlur() {
+    if (this.cancelEdit) {
+      this.cancelEdit = true;
+    } else {
+      this.item.name = this.proposedName;
+    }
     this.isEditing = false;
   }
 }
