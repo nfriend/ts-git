@@ -2,7 +2,7 @@
   <div>
     <div
       class="sidebar-item-container d-flex align-items-center"
-      :class="{ selected: isSelected }"
+      :class="{ selected: isSelected, editing: isEditing }"
       :style="indentStyle"
       @click="clicked"
     >
@@ -17,7 +17,22 @@
         v-if="!item.isFolder"
         icon="align-left"
       />
-      <span class="flex-grow-1">{{ item.name }}</span>
+      <span
+        v-if="!isEditing"
+        class="item-name flex-grow-1"
+        @keydown.enter="onNameEnterPressed"
+        tabindex="0"
+        >{{ item.name }}</span
+      >
+      <input
+        v-if="isEditing"
+        ref="editInput"
+        class="d-flex flex-grow-1 edit-item-name-input p-0"
+        style="min-width: 0"
+        v-model="item.name"
+        @blur="onEditInputBlur"
+        @keydown.enter="onEditEnterPressed"
+      />
       <span
         @click.stop="deleteClicked"
         v-b-tooltip.d500
@@ -47,7 +62,8 @@
   cursor: pointer;
   user-select: none;
 
-  &:hover {
+  &:hover,
+  &:focus-within {
     background: #2b2d2e;
 
     .delete-icon {
@@ -60,10 +76,25 @@
     color: #fff;
   }
 
+  &.editing {
+    background: #2b2d2e;
+  }
+
   .item-icon {
     width: 25px;
     font-size: 0.8em;
     transition: transform 0.15s ease-in-out;
+  }
+
+  .item-name {
+    outline: none;
+  }
+
+  .edit-item-name-input {
+    background: none;
+    color: white;
+    border: none;
+    outline: none;
   }
 
   .delete-icon {
@@ -86,6 +117,8 @@ export default class SidebarItem extends Vue {
   @Prop({ type: String, required: true }) readonly selectedPath!: string;
   @Prop({ type: Number, required: false, default: 0 }) readonly indent!: number;
 
+  isEditing: boolean = false;
+
   get indentStyle() {
     return {
       'padding-left': this.indent * 20 + 10 + 'px',
@@ -107,6 +140,24 @@ export default class SidebarItem extends Vue {
 
   itemSelected(item) {
     this.$emit('itemSelected', item);
+  }
+
+  onNameEnterPressed() {
+    this.isEditing = true;
+
+    Vue.nextTick().then(() => {
+      const editInput = <HTMLInputElement>this.$refs.editInput;
+      editInput.select();
+      editInput.focus();
+    });
+  }
+
+  onEditEnterPressed() {
+    this.isEditing = false;
+  }
+
+  onEditInputBlur() {
+    this.isEditing = false;
   }
 }
 </script>
