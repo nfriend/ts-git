@@ -50,7 +50,9 @@
         :item="item"
         :indent="indent + 1"
         :selectedItem="selectedItem"
+        :itemBeingEdited="itemBeingEdited"
         @itemSelected="itemSelected"
+        @itemEditing="itemEditing"
       />
     </div>
   </div>
@@ -126,9 +128,17 @@ export default class SidebarItem extends Vue {
 
   @Prop({
     type: Object,
-    required: true,
+    required: false,
+    default: undefined,
   })
-  readonly selectedItem!: FileSystemItem | undefined;
+  readonly selectedItem: FileSystemItem;
+
+  @Prop({
+    type: Object,
+    required: false,
+    default: undefined,
+  })
+  readonly itemBeingEdited: FileSystemItem;
 
   @Prop({
     type: Number,
@@ -137,20 +147,6 @@ export default class SidebarItem extends Vue {
   })
   readonly indent!: number;
 
-  @Prop({
-    type: Boolean,
-    required: false,
-    default: false,
-  })
-  readonly isNew!: number;
-
-  mounted() {
-    if (this.isNew) {
-      this.isEditing = true;
-    }
-  }
-
-  isEditing: boolean = false;
   proposedName: string = '';
 
   private cancelEdit = false;
@@ -163,6 +159,10 @@ export default class SidebarItem extends Vue {
 
   get isSelected() {
     return this.selectedItem === this.item;
+  }
+
+  get isEditing() {
+    return this.itemBeingEdited === this.item;
   }
 
   clicked() {
@@ -178,9 +178,13 @@ export default class SidebarItem extends Vue {
     this.$emit('itemSelected', item);
   }
 
+  itemEditing(item) {
+    this.$emit('itemEditing', item);
+  }
+
   onNameEnterDown() {
     this.proposedName = this.item.name;
-    this.isEditing = true;
+    this.$emit('itemEditing', this.item);
 
     Vue.nextTick().then(() => {
       const editInput = <HTMLInputElement>this.$refs.editInput;
@@ -190,12 +194,12 @@ export default class SidebarItem extends Vue {
   }
 
   onInputEnterDown() {
-    this.isEditing = false;
+    this.$emit('itemEditing', null);
   }
 
   onInputEscDown() {
     this.cancelEdit = true;
-    this.isEditing = false;
+    this.$emit('itemEditing', null);
   }
 
   onEditInputBlur() {
@@ -204,7 +208,7 @@ export default class SidebarItem extends Vue {
     } else {
       this.renameItem();
     }
-    this.isEditing = false;
+    this.$emit('itemEditing', null);
   }
 
   private async renameItem() {

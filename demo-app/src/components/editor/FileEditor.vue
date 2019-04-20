@@ -3,7 +3,10 @@
     <Sidebar
       class="flex-shrink-0 editor-sidebar"
       :filesAndFolders="filesAndFolders"
+      :selectedItem="selectedItem"
+      :itemBeingEdited="itemBeingEdited"
       @itemSelected="itemSelected"
+      @itemEditing="itemEditing"
       @newFolder="createNewFolder"
       @newFile="createNewFile"
     />
@@ -43,7 +46,8 @@ import {
   },
 })
 export default class FileEditor extends Vue {
-  private selectedItem: FileSystemItem | undefined = undefined;
+  private selectedItem: FileSystemItem = null;
+  private itemBeingEdited: FileSystemItem = null;
 
   async mounted() {
     await LocalStorageService.initializeDemoFileSystem();
@@ -66,6 +70,11 @@ export default class FileEditor extends Vue {
     await this.updateEditor();
   }
 
+  async itemEditing(itemBeingEdited: FileSystemItem) {
+    this.itemBeingEdited = itemBeingEdited;
+    await this.updateEditor();
+  }
+
   async updateFileSystem() {
     const fs = await BrowserFSService.fsPromise;
     this.filesAndFolders = await FileSystemService.getDirectoryContents('/');
@@ -74,8 +83,25 @@ export default class FileEditor extends Vue {
 
   async createNewFile() {
     if (await FileSystemService.isDirectory(this.selectedItem.path)) {
-      ////// todo
+      // find a unique filename for this file
+      const siblingNames = this.selectedItem.children.map(c => c.name);
+      let newFileName = 'new-file.txt';
+      let counter = 0;
+      while (siblingNames.includes(newFileName)) {
+        newFileName = `new-file-${++counter}.txt`;
+      }
+
+      const newPath = path.join(this.selectedItem.path, newFileName);
+      await LocalStorageService.createFile(newPath);
+
+      await this.updateFileSystem();
       await this.updateEditor();
+
+      // TODO: figure out how to find references to the new files
+      // Right now the FileSystemItems are recreated with each update,
+      // so can't rely on instance equality
+      // this.itemBeingEdited = newFile;
+      // this.selectedItem = newFile;
     } else {
       throw new Error('not yet implemented');
     }

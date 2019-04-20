@@ -51,6 +51,17 @@ export class LocalStorageService {
   }
 
   /**
+   * Creates a new file at the provided path
+   * The directory structure must already exist.
+   * @param filePath The path of the file to create
+   */
+  static async createFile(filePath: string) {
+    const fs = await BrowserFSService.fsPromise;
+
+    await fs.writeFileAsync(filePath, '');
+  }
+
+  /**
    * Recursively deletes all files and folders inside a directory
    * @param directory The directory whose contents will be deleted
    */

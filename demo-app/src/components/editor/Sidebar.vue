@@ -26,7 +26,9 @@
       :key="item.path"
       :item="item"
       :selectedItem="selectedItem"
+      :itemBeingEdited="itemBeingEdited"
       @itemSelected="itemSelected"
+      @itemEditing="itemEditing"
     />
   </div>
 </template>
@@ -63,14 +65,32 @@ import { FileSystemItem } from '../../services/FileSystem.service';
   },
 })
 export default class Sidebar extends Vue {
-  @Prop({ type: Array, required: true })
+  @Prop({ 
+    type: Array, 
+    required: true 
+  })
   readonly filesAndFolders!: FileSystemItem[];
 
-  selectedItem: FileSystemItem | undefined = undefined;
+  @Prop({
+    type: Object,
+    required: false,
+    default: undefined,
+  })
+  readonly selectedItem: FileSystemItem;
+
+  @Prop({
+    type: Object,
+    required: false,
+    default: undefined,
+  })
+  readonly itemBeingEdited: FileSystemItem;
 
   itemSelected(item: FileSystemItem) {
-    this.selectedItem = item;
     this.$emit('itemSelected', item);
+  }
+
+  itemEditing(item: FileSystemItem) {
+    this.$emit('itemEditing', item);
   }
 
   newFolderClicked() {
