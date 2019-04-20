@@ -114,6 +114,12 @@ export default class Terminal extends Vue {
         'Successfully cleared the filesystem. All files and folders have been deleted.',
       );
     },
+
+    // for testing purposes
+    refresh: async () => {
+      this.emitEvent();
+      return this.wrapOutput('Successfully refreshed the editor.');
+    },
     git: () => {
       return this.wrapOutput(`Did you mean "ts-git"? :)`);
     },

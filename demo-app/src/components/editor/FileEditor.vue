@@ -94,10 +94,7 @@ export default class FileEditor extends Vue {
   private async updateEditor() {
     const fs = await BrowserFSService.fsPromise;
     try {
-      const isDirectory = (await fs.lstatAsync(
-        this.selectedPath,
-      )).isDirectory();
-      if (!isDirectory) {
+      if (!(await FileSystemService.isDirectory(this.selectedPath))) {
         // update Monaco's syntax highlighting
         this.language = '';
         for (const option of this.extensionToLanguageMap) {

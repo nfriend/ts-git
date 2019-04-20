@@ -109,8 +109,12 @@
 </style>
 
 <script lang="ts">
+import * as path from 'path';
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { FileSystemItem } from '../../services/FileSystem.service';
+import {
+  FileSystemItem,
+  FileSystemService,
+} from '../../services/FileSystem.service';
 
 @Component({ name: 'SidebarItem' })
 export default class SidebarItem extends Vue {
@@ -186,7 +190,6 @@ export default class SidebarItem extends Vue {
   }
 
   onInputEnterDown() {
-    this.item.name = this.proposedName;
     this.isEditing = false;
   }
 
@@ -199,9 +202,17 @@ export default class SidebarItem extends Vue {
     if (this.cancelEdit) {
       this.cancelEdit = true;
     } else {
-      this.item.name = this.proposedName;
+      this.renameItem();
     }
     this.isEditing = false;
+  }
+
+  private async renameItem() {
+    const oldPath = this.item.path;
+    const newPath = path.join(oldPath, '../', this.proposedName);
+    await FileSystemService.renameFileOrFolder(oldPath, newPath);
+    this.item.name = this.proposedName;
+    this.item.path = newPath;
   }
 }
 </script>

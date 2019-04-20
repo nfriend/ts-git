@@ -1,5 +1,6 @@
 import { BrowserFSService } from './BrowserFS.service';
 import * as path from 'path';
+import FS from 'browserfs/dist/node/core/FS';
 
 export interface FileSystemItem {
   name: string;
@@ -37,6 +38,29 @@ export class FileSystemService {
     }
   }
 
+  /**
+   * Renames a file or folder
+   * @param oldPath The full path of the file or folder to rename
+   * @param newPath The new path of the file or folder
+   */
+  public static async renameFileOrFolder(
+    oldPath: string,
+    newPath: string,
+  ): Promise<void> {
+    const fs = await BrowserFSService.fsPromise;
+    await fs.renameAsync(oldPath, newPath);
+  }
+
+  /**
+   * Returns a boolean indicating if the path is a directory
+   * @param filePath The path to test
+   */
+  public static async isDirectory(filePath: string) {
+    const fs = await BrowserFSService.fsPromise;
+
+    return await fs.lstatAsync(filePath).isDirectory();
+  }
+
   private static async getDirectoryContentsRecurse(
     directory: string,
   ): Promise<FileSystemItem[]> {
@@ -47,7 +71,7 @@ export class FileSystemService {
 
     for (const item of contents) {
       const itemPath = path.join(directory, item);
-      const isDirectory = (await fs.lstatAsync(itemPath)).isDirectory();
+      const isDirectory = await this.isDirectory(itemPath);
 
       filesAndFolders.push({
         name: item,

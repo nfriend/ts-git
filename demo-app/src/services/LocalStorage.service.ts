@@ -1,6 +1,7 @@
 import { BrowserFSService } from './BrowserFS.service';
 import * as path from 'path';
 import { demoFiles, demoDirs } from './demo-files';
+import { FileSystemService } from './FileSystem.service';
 
 export class LocalStorageService {
   private static INIT_KEY: string = 'ts-git:has-demo-been-initialized';
@@ -60,8 +61,7 @@ export class LocalStorageService {
 
     for (const item of contents) {
       const itemPath = path.join(directory, item);
-      const isDirectory = (await fs.lstatSync(itemPath)).isDirectory();
-      if (isDirectory) {
+      if (await FileSystemService.isDirectory(itemPath)) {
         await this.deleteDirectoryContents(itemPath);
         await fs.rmdirAsync(itemPath);
       } else {
