@@ -25,7 +25,7 @@
       v-for="item in filesAndFolders"
       :key="item.path"
       :item="item"
-      :selectedPath="selectedPath"
+      :selectedItem="selectedItem"
       @itemSelected="itemSelected"
     />
   </div>
@@ -66,11 +66,11 @@ export default class Sidebar extends Vue {
   @Prop({ type: Array, required: true })
   readonly filesAndFolders!: FileSystemItem[];
 
-  selectedPath: string = '/';
+  selectedItem: FileSystemItem | undefined = undefined;
 
-  itemSelected(item) {
-    this.selectedPath = item.path;
-    this.$emit('itemSelected', this.selectedPath);
+  itemSelected(item: FileSystemItem) {
+    this.selectedItem = item;
+    this.$emit('itemSelected', item);
   }
 
   newFolderClicked() {

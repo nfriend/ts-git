@@ -43,7 +43,7 @@ import {
   },
 })
 export default class FileEditor extends Vue {
-  private selectedPath!: string;
+  private selectedItem: FileSystemItem | undefined = undefined;
 
   async mounted() {
     await LocalStorageService.initializeDemoFileSystem();
@@ -61,8 +61,8 @@ export default class FileEditor extends Vue {
 
   filesAndFolders: FileSystemItem[] = [];
 
-  async itemSelected(selectedPath: string) {
-    this.selectedPath = selectedPath;
+  async itemSelected(selectedItem: FileSystemItem) {
+    this.selectedItem = selectedItem;
     await this.updateEditor();
   }
 
@@ -72,8 +72,13 @@ export default class FileEditor extends Vue {
     await this.updateEditor();
   }
 
-  createNewFile() {
-    console.log('new file clicked!');
+  async createNewFile() {
+    if (await FileSystemService.isDirectory(this.selectedItem.path)) {
+      ////// todo
+      await this.updateEditor();
+    } else {
+      throw new Error('not yet implemented');
+    }
   }
 
   createNewFolder() {
@@ -94,17 +99,19 @@ export default class FileEditor extends Vue {
   private async updateEditor() {
     const fs = await BrowserFSService.fsPromise;
     try {
-      if (!(await FileSystemService.isDirectory(this.selectedPath))) {
+      if (!(await FileSystemService.isDirectory(this.selectedItem.path))) {
         // update Monaco's syntax highlighting
         this.language = '';
         for (const option of this.extensionToLanguageMap) {
-          if (option.regex.test(this.selectedPath)) {
+          if (option.regex.test(this.selectedItem.path)) {
             this.language = option.language;
             break;
           }
         }
 
-        this.code = await FileSystemService.getFileContents(this.selectedPath);
+        this.code = await FileSystemService.getFileContents(
+          this.selectedItem.path,
+        );
       }
     } catch (err) {
       this.code = '';

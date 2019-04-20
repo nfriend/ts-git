@@ -58,7 +58,7 @@ export class FileSystemService {
   public static async isDirectory(filePath: string) {
     const fs = await BrowserFSService.fsPromise;
 
-    return await fs.lstatAsync(filePath).isDirectory();
+    return (await fs.lstatAsync(filePath)).isDirectory();
   }
 
   private static async getDirectoryContentsRecurse(

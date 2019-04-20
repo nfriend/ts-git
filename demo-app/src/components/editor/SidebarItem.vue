@@ -49,7 +49,7 @@
         :key="item.path"
         :item="item"
         :indent="indent + 1"
-        :selectedPath="selectedPath"
+        :selectedItem="selectedItem"
         @itemSelected="itemSelected"
       />
     </div>
@@ -125,10 +125,10 @@ export default class SidebarItem extends Vue {
   readonly item!: FileSystemItem;
 
   @Prop({
-    type: String,
+    type: Object,
     required: true,
   })
-  readonly selectedPath!: string;
+  readonly selectedItem!: FileSystemItem | undefined;
 
   @Prop({
     type: Number,
@@ -162,7 +162,7 @@ export default class SidebarItem extends Vue {
   }
 
   get isSelected() {
-    return this.selectedPath === this.item.path;
+    return this.selectedItem === this.item;
   }
 
   clicked() {
