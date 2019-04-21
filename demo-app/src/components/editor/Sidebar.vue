@@ -25,10 +25,10 @@
       v-for="item in filesAndFolders"
       :key="item.path"
       :item="item"
-      :selectedItem="selectedItem"
-      :itemBeingEdited="itemBeingEdited"
-      @itemSelected="itemSelected"
-      @itemEditing="itemEditing"
+      :selectedPath="selectedPath"
+      :pathBeingEdited="pathBeingEdited"
+      @pathSelected="pathSelected"
+      @pathEditing="pathEditing"
     />
   </div>
 </template>
@@ -65,32 +65,32 @@ import { FileSystemItem } from '../../services/FileSystem.service';
   },
 })
 export default class Sidebar extends Vue {
-  @Prop({ 
-    type: Array, 
-    required: true 
+  @Prop({
+    type: Array,
+    required: true,
   })
   readonly filesAndFolders!: FileSystemItem[];
 
   @Prop({
-    type: Object,
+    type: String,
     required: false,
     default: undefined,
   })
-  readonly selectedItem: FileSystemItem;
+  readonly selectedPath!: string;
 
   @Prop({
-    type: Object,
+    type: String,
     required: false,
     default: undefined,
   })
-  readonly itemBeingEdited: FileSystemItem;
+  readonly pathBeingEdited!: string;
 
-  itemSelected(item: FileSystemItem) {
-    this.$emit('itemSelected', item);
+  pathSelected(path: string) {
+    this.$emit('pathSelected', path);
   }
 
-  itemEditing(item: FileSystemItem) {
-    this.$emit('itemEditing', item);
+  pathEditing(path: string) {
+    this.$emit('pathEditing', path);
   }
 
   newFolderClicked() {

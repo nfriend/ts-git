@@ -3,10 +3,10 @@
     <Sidebar
       class="flex-shrink-0 editor-sidebar"
       :filesAndFolders="filesAndFolders"
-      :selectedItem="selectedItem"
-      :itemBeingEdited="itemBeingEdited"
-      @itemSelected="itemSelected"
-      @itemEditing="itemEditing"
+      :selectedPath="selectedPath"
+      :pathBeingEdited="pathBeingEdited"
+      @pathSelected="pathSelected"
+      @pathEditing="pathEditing"
       @newFolder="createNewFolder"
       @newFile="createNewFile"
     />
@@ -65,12 +65,12 @@ export default class FileEditor extends Vue {
 
   filesAndFolders: FileSystemItem[] = [];
 
-  async itemSelected(path: string) {
+  async pathSelected(path: string) {
     this.selectedPath = path;
     await this.updateEditor();
   }
 
-  async itemEditing(path: string) {
+  async pathEditing(path: string) {
     this.pathBeingEdited = path;
     await this.updateEditor();
   }
@@ -83,25 +83,15 @@ export default class FileEditor extends Vue {
 
   async createNewFile() {
     if (await FileSystemService.isDirectory(this.selectedPath)) {
-      // find a unique filename for this file
-      const siblingNames = this.selectedItem.children.map(c => c.name);
-      let newFileName = 'new-file.txt';
-      let counter = 0;
-      while (siblingNames.includes(newFileName)) {
-        newFileName = `new-file-${++counter}.txt`;
-      }
-
-      const newPath = path.join(this.selectedItem.path, newFileName);
-      await LocalStorageService.createFile(newPath);
+      const newFilePath = await FileSystemService.createNewFile(
+        this.selectedPath,
+      );
 
       await this.updateFileSystem();
       await this.updateEditor();
 
-      // TODO: figure out how to find references to the new files
-      // Right now the FileSystemItems are recreated with each update,
-      // so can't rely on instance equality
-      // this.itemBeingEdited = newFile;
-      // this.selectedItem = newFile;
+      this.selectedPath = newFilePath;
+      this.pathBeingEdited = newFilePath;
     } else {
       throw new Error('not yet implemented');
     }
@@ -125,19 +115,17 @@ export default class FileEditor extends Vue {
   private async updateEditor() {
     const fs = await BrowserFSService.fsPromise;
     try {
-      if (!(await FileSystemService.isDirectory(this.selectedItem.path))) {
+      if (!(await FileSystemService.isDirectory(this.selectedPath))) {
         // update Monaco's syntax highlighting
         this.language = '';
         for (const option of this.extensionToLanguageMap) {
-          if (option.regex.test(this.selectedItem.path)) {
+          if (option.regex.test(this.selectedPath)) {
             this.language = option.language;
             break;
           }
         }
 
-        this.code = await FileSystemService.getFileContents(
-          this.selectedItem.path,
-        );
+        this.code = await FileSystemService.getFileContents(this.selectedPath);
       }
     } catch (err) {
       this.code = '';

@@ -49,10 +49,10 @@
         :key="item.path"
         :item="item"
         :indent="indent + 1"
-        :selectedItem="selectedItem"
-        :itemBeingEdited="itemBeingEdited"
-        @itemSelected="itemSelected"
-        @itemEditing="itemEditing"
+        :selectedPath="selectedPath"
+        :pathBeingEdited="pathBeingEdited"
+        @pathSelected="pathSelected"
+        @pathEditing="pathEditing"
       />
     </div>
   </div>
@@ -127,18 +127,18 @@ export default class SidebarItem extends Vue {
   readonly item!: FileSystemItem;
 
   @Prop({
-    type: Object,
+    type: String,
     required: false,
     default: undefined,
   })
-  readonly selectedItem: FileSystemItem;
+  readonly selectedPath!: string;
 
   @Prop({
-    type: Object,
+    type: String,
     required: false,
     default: undefined,
   })
-  readonly itemBeingEdited: FileSystemItem;
+  readonly pathBeingEdited!: string;
 
   @Prop({
     type: Number,
@@ -158,33 +158,33 @@ export default class SidebarItem extends Vue {
   }
 
   get isSelected() {
-    return this.selectedItem === this.item;
+    return this.selectedPath === this.item.path;
   }
 
   get isEditing() {
-    return this.itemBeingEdited === this.item;
+    return this.pathBeingEdited === this.item.path;
   }
 
   clicked() {
     this.item.isFolderOpen = !this.item.isFolderOpen;
-    this.$emit('itemSelected', this.item);
+    this.$emit('pathSelected', this.item.path);
   }
 
   deleteClicked() {
-    this.$emit('itemDeleted', this.item);
+    this.$emit('pathDeleted', this.item.path);
   }
 
-  itemSelected(item) {
-    this.$emit('itemSelected', item);
+  pathSelected(path: string) {
+    this.$emit('pathSelected', path);
   }
 
-  itemEditing(item) {
-    this.$emit('itemEditing', item);
+  pathEditing(path: string) {
+    this.$emit('pathEditing', path);
   }
 
   onNameEnterDown() {
     this.proposedName = this.item.name;
-    this.$emit('itemEditing', this.item);
+    this.$emit('pathEditing', this.item.path);
 
     Vue.nextTick().then(() => {
       const editInput = <HTMLInputElement>this.$refs.editInput;
@@ -194,12 +194,12 @@ export default class SidebarItem extends Vue {
   }
 
   onInputEnterDown() {
-    this.$emit('itemEditing', null);
+    this.$emit('pathEditing', null);
   }
 
   onInputEscDown() {
     this.cancelEdit = true;
-    this.$emit('itemEditing', null);
+    this.$emit('pathEditing', null);
   }
 
   onEditInputBlur() {
@@ -208,7 +208,7 @@ export default class SidebarItem extends Vue {
     } else {
       this.renameItem();
     }
-    this.$emit('itemEditing', null);
+    this.$emit('pathEditing', null);
   }
 
   private async renameItem() {

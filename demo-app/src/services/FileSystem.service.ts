@@ -61,6 +61,116 @@ export class FileSystemService {
     return (await fs.lstatAsync(filePath)).isDirectory();
   }
 
+  /**
+   * Finds a single FileSystemItem in a file system structure.
+   * If multiple matches are found, only the first is returned.
+   * @param fileSystem The file system structure to search
+   * @param filterFn A function that describes which items to select
+   */
+  static findItem(
+    fileSystem: FileSystemItem[],
+    filterFn: (item: FileSystemItem) => boolean,
+  ): FileSystemItem {
+    return this.findItems(fileSystem, filterFn)[0];
+  }
+
+  /**
+   * Finds FileSystemItems in a file system structure.
+   * @param fileSystem The file system structure to search
+   * @param filterFn A function that describes which items to select
+   */
+  static findItems(
+    fileSystem: FileSystemItem[],
+    filterFn: (item: FileSystemItem) => boolean,
+  ): FileSystemItem[] {
+    let items: FileSystemItem[] = [];
+
+    for (const item of fileSystem) {
+      if (filterFn(item)) {
+        items.push(item);
+      }
+      items = items.concat(this.findItems(item.children, filterFn));
+    }
+
+    return items;
+  }
+
+  /**
+   * Creates a new file with a unique name
+   * in the provided directory.  Returns the name
+   * of the newly created file.
+   * @param parentFolder The folder to create the new folder in
+   */
+  static async createNewFile(parentFolder: string): Promise<string> {
+    return await this.createNewItem(parentFolder, 'file');
+  }
+
+  /**
+   * Creates a new folder with a unique name
+   * in the provided directory.  Returns the name
+   * of the newly created folder.
+   * @param parentFolder The folder to create the new folder in
+   */
+  static async createNewFolder(parentFolder: string): Promise<string> {
+    return await this.createNewItem(parentFolder, 'folder');
+  }
+
+  /**
+   * Creates a new file or folder with a unique name
+   * in the provided directory.  Returns the name
+   * of the newly created item.
+   * @param parentFolder The folder to create the new item in
+   * @param type The type of item to create (file or folder)
+   */
+  private static async createNewItem(
+    parentFolder: string,
+    type: 'file' | 'folder',
+  ): Promise<string> {
+    const fs = await BrowserFSService.fsPromise;
+
+    const contents: string[] = (await fs.readdirAsync(parentFolder)).map(i =>
+      i.toLowerCase(),
+    );
+
+    let newItemName = type === 'folder' ? 'new-folder' : 'new-file';
+    let counter = 0;
+    while (contents.includes(newItemName)) {
+      counter++;
+      let newItemName =
+        type === 'folder' ? `new-folder-${counter}` : `new-file-${counter}`;
+    }
+
+    const newPath = path.join(parentFolder, newItemName);
+
+    if (type === 'folder') {
+      await fs.mkdirAsync(newPath);
+    } else {
+      await fs.writeFileAsync(newPath, '');
+    }
+
+    return newPath;
+  }
+
+  /**
+   * Recursively deletes all files and folders inside a directory
+   * @param directory The directory whose contents will be deleted
+   */
+  static async deleteDirectoryContents(directory: string) {
+    const fs = await BrowserFSService.fsPromise;
+
+    const contents = await fs.readdirAsync(directory);
+
+    for (const item of contents) {
+      const itemPath = path.join(directory, item);
+      if (await FileSystemService.isDirectory(itemPath)) {
+        await this.deleteDirectoryContents(itemPath);
+        await fs.rmdirAsync(itemPath);
+      } else {
+        await fs.unlinkAsync(itemPath);
+      }
+    }
+  }
+
   private static async getDirectoryContentsRecurse(
     directory: string,
   ): Promise<FileSystemItem[]> {
