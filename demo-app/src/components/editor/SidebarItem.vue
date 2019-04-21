@@ -147,6 +147,11 @@ export default class SidebarItem extends Vue {
   })
   readonly indent!: number;
 
+  mounted() {
+    this.proposedName = this.item.name;
+    console.log('this.selectedPath', this.selectedPath);
+  }
+
   proposedName: string = '';
 
   private cancelEdit = false;

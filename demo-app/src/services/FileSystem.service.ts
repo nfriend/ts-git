@@ -136,7 +136,7 @@ export class FileSystemService {
     let counter = 0;
     while (contents.includes(newItemName)) {
       counter++;
-      let newItemName =
+      newItemName =
         type === 'folder' ? `new-folder-${counter}` : `new-file-${counter}`;
     }
 
