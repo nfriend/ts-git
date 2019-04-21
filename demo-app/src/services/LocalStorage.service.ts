@@ -1,7 +1,7 @@
 import { BrowserFSService } from './BrowserFS.service';
 import * as path from 'path';
 import { demoFiles, demoDirs } from './demo-files';
-import { FileSystemService } from './FileSystem.service';
+import { FileSystemService, FileSystemItem } from './FileSystem.service';
 
 export class LocalStorageService {
   private static INIT_KEY: string = 'ts-git:has-demo-been-initialized';
@@ -47,7 +47,7 @@ export class LocalStorageService {
    * (Except for the root folder)
    */
   static async clearFileSystem() {
-    await await this.deleteDirectoryContents('/');
+    await this.deleteDirectoryContents('/');
   }
 
   /**
@@ -59,6 +59,77 @@ export class LocalStorageService {
     const fs = await BrowserFSService.fsPromise;
 
     await fs.writeFileAsync(filePath, '');
+  }
+
+  /**
+   * Finds a single FileSystemItem in a file system structure.
+   * If multiple matches are found, only the first is returned.
+   * @param fileSystem The file system structure to search
+   * @param filterFn A function that describes which items to select
+   */
+  static findItem(
+    fileSystem: FileSystemItem[],
+    filterFn: (item: FileSystemItem) => boolean,
+  ): FileSystemItem {
+    return this.findItems(fileSystem, filterFn)[0];
+  }
+
+  /**
+   * Finds FileSystemItems in a file system structure.
+   * @param fileSystem The file system structure to search
+   * @param filterFn A function that describes which items to select
+   */
+  static findItems(
+    fileSystem: FileSystemItem[],
+    filterFn: (item: FileSystemItem) => boolean,
+  ): FileSystemItem[] {
+    let items: FileSystemItem[] = [];
+
+    for (const item of fileSystem) {
+      if (filterFn(item)) {
+        items.push(item);
+      }
+      items = items.concat(this.findItems(item.children, filterFn));
+    }
+
+    return items;
+  }
+
+  /**
+   * Creates a new file with a unique name
+   * in the provided directory.  Returns the name
+   * of the newly created file.
+   * @param parentFolder The folder to create the new folder in
+   */
+  static async createNewFile(parentFolder: string): Promise<string> {
+    return await this.createNewItem(parentFolder, 'file');
+  }
+
+  /**
+   * Creates a new folder with a unique name
+   * in the provided directory.  Returns the name
+   * of the newly created folder.
+   * @param parentFolder The folder to create the new folder in
+   */
+  static async createNewFolder(parentFolder: string): Promise<string> {
+    return await this.createNewItem(parentFolder, 'folder');
+  }
+
+  /**
+   * Creates a new file or folder with a unique name
+   * in the provided directory.  Returns the name
+   * of the newly created item.
+   * @param parentFolder The folder to create the new item in
+   * @param type The type of item to create (file or folder)
+   */
+  private static async createNewItem(
+    parentFolder: string,
+    type: 'file' | 'folder',
+  ): Promise<string> {
+    const fs = await BrowserFSService.fsPromise;
+
+    const contents = await fs.readdirAsync(parentFolder);
+    contents.map;
   }
 
   /**

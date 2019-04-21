@@ -46,8 +46,8 @@ import {
   },
 })
 export default class FileEditor extends Vue {
-  private selectedItem: FileSystemItem = null;
-  private itemBeingEdited: FileSystemItem = null;
+  private selectedPath: string = null;
+  private pathBeingEdited: string = null;
 
   async mounted() {
     await LocalStorageService.initializeDemoFileSystem();
@@ -65,13 +65,13 @@ export default class FileEditor extends Vue {
 
   filesAndFolders: FileSystemItem[] = [];
 
-  async itemSelected(selectedItem: FileSystemItem) {
-    this.selectedItem = selectedItem;
+  async itemSelected(path: string) {
+    this.selectedPath = path;
     await this.updateEditor();
   }
 
-  async itemEditing(itemBeingEdited: FileSystemItem) {
-    this.itemBeingEdited = itemBeingEdited;
+  async itemEditing(path: string) {
+    this.pathBeingEdited = path;
     await this.updateEditor();
   }
 
@@ -82,7 +82,7 @@ export default class FileEditor extends Vue {
   }
 
   async createNewFile() {
-    if (await FileSystemService.isDirectory(this.selectedItem.path)) {
+    if (await FileSystemService.isDirectory(this.selectedPath)) {
       // find a unique filename for this file
       const siblingNames = this.selectedItem.children.map(c => c.name);
       let newFileName = 'new-file.txt';
