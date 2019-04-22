@@ -37,7 +37,7 @@
     "@types/node": "~7.0",
     "@types/yargs-parser": "^13.0.0",
     "bootstrap": "^4.3.1",
-    "bootstrap-vue": "^2.0.0-rc.16",
+    "bootstrap-vue": "^2.0.0-rc.19",
     "browserfs": "^1.4.3",
     "core-js": "^2.6.5",
     "i": "^0.3.6",

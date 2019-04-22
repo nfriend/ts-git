@@ -172,6 +172,17 @@ export class FileSystemService {
     }
   }
 
+  /**
+   * Saves a string to a file
+   * @param filePath The file path to save
+   * @param fileContents The new contents of the file
+   */
+  static async saveFile(filePath: string, fileContents: string) {
+    const fs = await BrowserFSService.fsPromise;
+
+    await fs.writeFileAsync(filePath, fileContents);
+  }
+
   private static async getDirectoryContentsRecurse(
     directory: string,
   ): Promise<FileSystemItem[]> {

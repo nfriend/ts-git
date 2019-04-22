@@ -12,6 +12,7 @@
     />
     <MonacoEditor
       class="flex-grow-1"
+      ref="editor"
       v-model="code"
       :options="options"
       theme="vs-dark"
@@ -27,8 +28,9 @@
 </style>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import MonacoEditor from 'vue-monaco';
+import * as monaco from 'monaco-editor';
 import Sidebar from './Sidebar.vue';
 import { Stats } from 'fs';
 import * as path from 'path';
@@ -38,6 +40,7 @@ import {
   FileSystemService,
   FileSystemItem,
 } from '../../services/FileSystem.service';
+import debounce from 'lodash/debounce';
 
 @Component({
   components: {
@@ -46,10 +49,23 @@ import {
   },
 })
 export default class FileEditor extends Vue {
+  /** The path that is selected in the sidebar.  Can be a folder or a file. */
   private selectedPath: string = null;
+
+  /** The path of the item being renamed.  Can be a folder or a file. */
   private pathBeingEdited: string = null;
 
+  /** The path of the item in the Monaco editor.  Can only point to a file. */
+  private editorPath: string = null;
+
   async mounted() {
+    const editor = (<any>this.$refs.editor).getMonaco();
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S, () => {
+      (<any>this).$bvToast.toast('Changes are saved automatically 😊', {
+        title: 'Just a note...',
+      });
+    });
+
     await LocalStorageService.initializeDemoFileSystem();
     this.updateFileSystem();
   }
@@ -66,6 +82,7 @@ export default class FileEditor extends Vue {
   filesAndFolders: FileSystemItem[] = [];
 
   async pathSelected(path: string) {
+    this.debouncedSaveCode.flush();
     this.selectedPath = path;
     await this.updateEditor();
   }
@@ -87,6 +104,11 @@ export default class FileEditor extends Vue {
 
   async createNewFolder() {
     await this.creatNewItem('folder');
+  }
+
+  @Watch('code')
+  onChildChanged(newCode: string) {
+    this.debouncedSaveCode();
   }
 
   private async creatNewItem(type: 'file' | 'folder') {
@@ -123,6 +145,8 @@ export default class FileEditor extends Vue {
     const fs = await BrowserFSService.fsPromise;
     try {
       if (!(await FileSystemService.isDirectory(this.selectedPath))) {
+        this.editorPath = this.selectedPath;
+
         // update Monaco's syntax highlighting
         this.language = '';
         for (const option of this.extensionToLanguageMap) {
@@ -138,5 +162,11 @@ export default class FileEditor extends Vue {
       this.code = '';
     }
   }
+
+  private async saveCode() {
+    await FileSystemService.saveFile(this.editorPath, this.code);
+  }
+
+  private debouncedSaveCode = debounce(this.saveCode, 1000);
 }
 </script>

@@ -26,9 +26,7 @@ library.add(
 );
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
-
 Vue.config.productionTip = false;
-
 Vue.use(BootstrapVue);
 
 new Vue({
