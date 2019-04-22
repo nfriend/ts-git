@@ -5,6 +5,7 @@ import { FileSystemService, FileSystemItem } from './FileSystem.service';
 
 export class LocalStorageService {
   private static INIT_KEY: string = 'ts-git:has-demo-been-initialized';
+  private static FOLDER_STATE_KEY: string = 'ts-git:folder-state';
 
   /**
    * Resets the file system to the "demo" state
@@ -47,6 +48,18 @@ export class LocalStorageService {
    * (Except for the root folder)
    */
   static async clearFileSystem() {
+    this.setCollapsedFolders([]);
     await FileSystemService.deleteDirectoryContents('/');
+  }
+
+  static getCollapsedFolders(): string[] {
+    return JSON.parse(localStorage.getItem(this.FOLDER_STATE_KEY)) || [];
+  }
+
+  static setCollapsedFolders(collapsedFolders: string[]) {
+    localStorage.setItem(
+      this.FOLDER_STATE_KEY,
+      JSON.stringify(collapsedFolders),
+    );
   }
 }

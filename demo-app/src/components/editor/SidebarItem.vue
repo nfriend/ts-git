@@ -12,7 +12,7 @@
     >
       <font-awesome-icon
         class="item-icon"
-        :class="{ angled: item.isFolderOpen }"
+        :class="{ angled: isFolderOpen }"
         v-if="item.isFolder"
         icon="caret-right"
       />
@@ -48,7 +48,7 @@
         <font-awesome-icon class="item-icon delete-icon" icon="trash" />
       </span>
     </div>
-    <div class="children-container" v-if="item.isFolderOpen">
+    <div class="children-container" v-if="isFolderOpen">
       <SidebarItem
         v-for="item in item.children"
         :key="item.path"
@@ -56,8 +56,12 @@
         :indent="indent + 1"
         :selectedPath="selectedPath"
         :pathBeingEdited="pathBeingEdited"
+        :collapsedPaths="collapsedPaths"
         @pathSelected="pathSelected"
         @pathEditing="pathEditing"
+        @pathRenamed="pathRenamed"
+        @pathDeleted="pathDeleted"
+        @folderToggled="folderToggled"
       />
     </div>
   </div>
@@ -150,6 +154,12 @@ export default class SidebarItem extends Vue {
   readonly pathBeingEdited!: string;
 
   @Prop({
+    type: Array,
+    required: true,
+  })
+  readonly collapsedPaths!: string[];
+
+  @Prop({
     type: Number,
     required: false,
     default: 0,
@@ -186,9 +196,15 @@ export default class SidebarItem extends Vue {
     return this.item.siblingNames.includes(this.proposedName);
   }
 
+  get isFolderOpen() {
+    return this.item.isFolder && !this.collapsedPaths.includes(this.item.path);
+  }
+
   clicked() {
-    this.item.isFolderOpen = !this.item.isFolderOpen;
     this.$emit('pathSelected', this.item.path);
+    if (this.item.isFolder) {
+      this.$emit('folderToggled', this.item.path);
+    }
   }
 
   deleteClicked() {
@@ -201,6 +217,18 @@ export default class SidebarItem extends Vue {
 
   pathEditing(path: string) {
     this.$emit('pathEditing', path);
+  }
+
+  pathRenamed(...args) {
+    this.$emit('pathRenamed', ...args);
+  }
+
+  pathDeleted(path: string) {
+    this.$emit('pathDeleted', path);
+  }
+
+  folderToggled(path: string) {
+    this.$emit('folderToggled', path);
   }
 
   onNameEnterDown() {
@@ -231,9 +259,7 @@ export default class SidebarItem extends Vue {
   private async renameItem() {
     const oldPath = this.item.path;
     const newPath = path.join(oldPath, '../', this.proposedName);
-    await FileSystemService.renameFileOrFolder(oldPath, newPath);
-    this.item.name = this.proposedName;
-    this.item.path = newPath;
+    this.$emit('pathRenamed', oldPath, newPath);
   }
 
   private focusInputOnNextTick() {

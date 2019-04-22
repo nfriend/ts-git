@@ -5,8 +5,12 @@
       :filesAndFolders="filesAndFolders"
       :selectedPath="selectedPath"
       :pathBeingEdited="pathBeingEdited"
+      :collapsedPaths="collapsedPaths"
       @pathSelected="pathSelected"
       @pathEditing="pathEditing"
+      @pathRenamed="pathRenamed"
+      @pathDeleted="pathDeleted"
+      @folderToggled="folderToggled"
       @newFolder="createNewFolder"
       @newFile="createNewFile"
     />
@@ -41,6 +45,7 @@ import {
   FileSystemItem,
 } from '../../services/FileSystem.service';
 import debounce from 'lodash/debounce';
+import without from 'lodash/without';
 
 @Component({
   components: {
@@ -58,6 +63,9 @@ export default class FileEditor extends Vue {
   /** The path of the item in the Monaco editor.  Can only point to a file. */
   private editorPath: string = null;
 
+  /** The list of all paths that have been collapsed.  Can only point to folders. */
+  private collapsedPaths: string[] = [];
+
   async mounted() {
     const editor = (<any>this.$refs.editor).getMonaco();
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S, () => {
@@ -65,6 +73,8 @@ export default class FileEditor extends Vue {
         title: 'Just a note...',
       });
     });
+
+    this.collapsedPaths = LocalStorageService.getCollapsedFolders();
 
     await LocalStorageService.initializeDemoFileSystem();
     this.updateFileSystem();
@@ -77,12 +87,20 @@ export default class FileEditor extends Vue {
 
   code = '';
 
+  @Watch('code')
+  onCodeChanged(newCode: string) {
+    this.debouncedSaveCode();
+  }
+
   language: string = '';
 
   filesAndFolders: FileSystemItem[] = [];
 
   async pathSelected(path: string) {
-    this.debouncedSaveCode.flush();
+    // cancel any pending debounced saves and save immediately
+    this.debouncedSaveCode.cancel();
+    await this.saveCode();
+
     this.selectedPath = path;
     await this.updateEditor();
   }
@@ -92,9 +110,75 @@ export default class FileEditor extends Vue {
     await this.updateEditor();
   }
 
+  async pathRenamed(oldPath: string, newPath: string) {
+    await FileSystemService.renameFileOrFolder(oldPath, newPath);
+    this.selectedPath = newPath;
+    await this.updateFileSystem();
+  }
+
+  async pathDeleted(path: string) {
+    // this.editorPath = null;
+
+    // cancel any pending debounced saves and save immediately
+    this.debouncedSaveCode.cancel();
+    await this.saveCode();
+
+    // delete the path and update the file sytem
+    await FileSystemService.deletePath(path);
+    await this.updateFileSystem();
+
+    // if the currently selected item was deleted,
+    // clear this.selectedPath to match
+    const selectedItem = FileSystemService.findItem(
+      this.filesAndFolders,
+      f => f.path === this.selectedPath,
+    );
+    if (!selectedItem) {
+      this.selectedPath = null;
+    }
+
+    // if the currently selected item was being renamed,
+    // clear this.selectedPath to match
+    const itemBeingRenamed = FileSystemService.findItem(
+      this.filesAndFolders,
+      f => f.path === this.pathBeingEdited,
+    );
+    if (!itemBeingRenamed) {
+      this.pathBeingEdited = null;
+    }
+
+    // if the editor is currently showing a path that was,
+    // clear out the editor path first
+    const itemInEditor = FileSystemService.findItem(
+      this.filesAndFolders,
+      f => f.path === this.editorPath,
+    );
+    if (!itemInEditor) {
+      this.editorPath = null;
+    }
+  }
+
+  folderToggled(path: string) {
+    if (this.collapsedPaths.includes(path)) {
+      this.openFolder(path);
+    } else {
+      this.closeFolder(path);
+    }
+  }
+
+  private openFolder(path: string) {
+    this.collapsedPaths = without(this.collapsedPaths, path);
+    LocalStorageService.setCollapsedFolders(this.collapsedPaths);
+  }
+
+  private closeFolder(path: string) {
+    this.collapsedPaths.push(path);
+    LocalStorageService.setCollapsedFolders(this.collapsedPaths);
+  }
+
   async updateFileSystem() {
-    const fs = await BrowserFSService.fsPromise;
     this.filesAndFolders = await FileSystemService.getDirectoryContents('/');
+    this.collapsedPaths = LocalStorageService.getCollapsedFolders();
     await this.updateEditor();
   }
 
@@ -106,17 +190,17 @@ export default class FileEditor extends Vue {
     await this.creatNewItem('folder');
   }
 
-  @Watch('code')
-  onChildChanged(newCode: string) {
-    this.debouncedSaveCode();
-  }
-
   private async creatNewItem(type: 'file' | 'folder') {
+    // handle the case where this.selectedPath is null
+    const selectedPath = this.selectedPath || '/';
+
     let parentFolder: string = (await FileSystemService.isDirectory(
-      this.selectedPath,
+      selectedPath,
     ))
-      ? this.selectedPath
-      : path.join(this.selectedPath, '../');
+      ? selectedPath
+      : path.join(selectedPath, '../');
+
+    this.openFolder(parentFolder);
 
     const newFilePath =
       type === 'folder'
@@ -142,7 +226,6 @@ export default class FileEditor extends Vue {
   ];
 
   private async updateEditor() {
-    const fs = await BrowserFSService.fsPromise;
     try {
       if (!(await FileSystemService.isDirectory(this.selectedPath))) {
         this.editorPath = this.selectedPath;
@@ -164,7 +247,9 @@ export default class FileEditor extends Vue {
   }
 
   private async saveCode() {
-    await FileSystemService.saveFile(this.editorPath, this.code);
+    if (this.editorPath) {
+      await FileSystemService.saveFile(this.editorPath, this.code);
+    }
   }
 
   private debouncedSaveCode = debounce(this.saveCode, 1000);

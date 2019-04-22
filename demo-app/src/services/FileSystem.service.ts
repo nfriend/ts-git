@@ -153,6 +153,21 @@ export class FileSystemService {
   }
 
   /**
+   * Deletes a file or a folder
+   * @param fileOrFolderPath The file or folder to delete
+   */
+  static async deletePath(fileOrFolderPath: string) {
+    const fs = await BrowserFSService.fsPromise;
+
+    if (await this.isDirectory(fileOrFolderPath)) {
+      await this.deleteDirectoryContents(fileOrFolderPath);
+      await this.deleteDirectory(fileOrFolderPath);
+    } else {
+      await this.deleteFile(fileOrFolderPath);
+    }
+  }
+
+  /**
    * Recursively deletes all files and folders inside a directory
    * @param directory The directory whose contents will be deleted
    */
@@ -170,6 +185,26 @@ export class FileSystemService {
         await fs.unlinkAsync(itemPath);
       }
     }
+  }
+
+  /**
+   * Deletes a file
+   * @param filePath The file path to delete
+   */
+  static async deleteFile(filePath: string) {
+    const fs = await BrowserFSService.fsPromise;
+
+    await fs.unlinkAsync(filePath);
+  }
+
+  /**
+   * Deletes an (empty) directory
+   * @param directory The empty directory to delete
+   */
+  static async deleteDirectory(directory: string) {
+    const fs = await BrowserFSService.fsPromise;
+
+    await fs.rmdir(directory);
   }
 
   /**

@@ -27,8 +27,12 @@
       :item="item"
       :selectedPath="selectedPath"
       :pathBeingEdited="pathBeingEdited"
+      :collapsedPaths="collapsedPaths"
       @pathSelected="pathSelected"
       @pathEditing="pathEditing"
+      @pathRenamed="pathRenamed"
+      @pathDeleted="pathDeleted"
+      @folderToggled="folderToggled"
     />
   </div>
 </template>
@@ -85,12 +89,30 @@ export default class Sidebar extends Vue {
   })
   readonly pathBeingEdited!: string;
 
+  @Prop({
+    type: Array,
+    required: true,
+  })
+  readonly collapsedPaths!: string[];
+
   pathSelected(path: string) {
     this.$emit('pathSelected', path);
   }
 
   pathEditing(path: string) {
     this.$emit('pathEditing', path);
+  }
+
+  pathRenamed(...args) {
+    this.$emit('pathRenamed', ...args);
+  }
+
+  pathDeleted(path: string) {
+    this.$emit('pathDeleted', path);
+  }
+
+  folderToggled(path: string) {
+    this.$emit('folderToggled', path);
   }
 
   newFolderClicked() {
