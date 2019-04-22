@@ -1,6 +1,6 @@
 import { BrowserFSService } from './BrowserFS.service';
 import * as path from 'path';
-import FS from 'browserfs/dist/node/core/FS';
+import without from 'lodash/without';
 
 export interface FileSystemItem {
   name: string;
@@ -8,6 +8,7 @@ export interface FileSystemItem {
   isFolder: boolean;
   isFolderOpen: boolean;
   children: FileSystemItem[];
+  siblingNames: string[];
 }
 
 export class FileSystemService {
@@ -189,6 +190,7 @@ export class FileSystemService {
         isFolder: isDirectory,
         isFolderOpen: isDirectory,
         children: isDirectory ? await this.getDirectoryContents(itemPath) : [],
+        siblingNames: without(contents, item),
       });
     }
 

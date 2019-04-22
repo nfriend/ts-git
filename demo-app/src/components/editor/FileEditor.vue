@@ -82,23 +82,30 @@ export default class FileEditor extends Vue {
   }
 
   async createNewFile() {
-    if (await FileSystemService.isDirectory(this.selectedPath)) {
-      const newFilePath = await FileSystemService.createNewFile(
-        this.selectedPath,
-      );
-
-      await this.updateFileSystem();
-      await this.updateEditor();
-
-      this.selectedPath = newFilePath;
-      this.pathBeingEdited = newFilePath;
-    } else {
-      throw new Error('not yet implemented');
-    }
+    await this.creatNewItem('file');
   }
 
-  createNewFolder() {
-    console.log('new folder clicked!');
+  async createNewFolder() {
+    await this.creatNewItem('folder');
+  }
+
+  private async creatNewItem(type: 'file' | 'folder') {
+    let parentFolder: string = (await FileSystemService.isDirectory(
+      this.selectedPath,
+    ))
+      ? this.selectedPath
+      : path.join(this.selectedPath, '../');
+
+    const newFilePath =
+      type === 'folder'
+        ? await FileSystemService.createNewFolder(parentFolder)
+        : await FileSystemService.createNewFile(parentFolder);
+
+    this.selectedPath = newFilePath;
+    this.pathBeingEdited = newFilePath;
+
+    await this.updateFileSystem();
+    await this.updateEditor();
   }
 
   private extensionToLanguageMap = [

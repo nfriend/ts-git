@@ -2,7 +2,11 @@
   <div>
     <div
       class="sidebar-item-container d-flex align-items-center"
-      :class="{ selected: isSelected, editing: isEditing }"
+      :class="{
+        selected: isSelected,
+        editing: isEditing,
+        'has-error': proposedNameIsDuplicate,
+      }"
       :style="indentStyle"
       @click="clicked"
     >
@@ -19,6 +23,7 @@
       />
       <span
         v-if="!isEditing"
+        ref="nameSpan"
         class="item-name flex-grow-1"
         @keydown.enter="onNameEnterDown"
         tabindex="0"
@@ -74,6 +79,10 @@
     }
   }
 
+  &.has-error {
+    background: #591d1e !important;
+  }
+
   &.selected {
     background: #0b4770;
     color: #fff;
@@ -112,7 +121,7 @@
 
 <script lang="ts">
 import * as path from 'path';
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import {
   FileSystemItem,
   FileSystemService,
@@ -149,7 +158,10 @@ export default class SidebarItem extends Vue {
 
   mounted() {
     this.proposedName = this.item.name;
-    console.log('this.selectedPath', this.selectedPath);
+
+    if (this.isEditing) {
+      this.focusInputOnNextTick();
+    }
   }
 
   proposedName: string = '';
@@ -168,6 +180,10 @@ export default class SidebarItem extends Vue {
 
   get isEditing() {
     return this.pathBeingEdited === this.item.path;
+  }
+
+  get proposedNameIsDuplicate() {
+    return this.item.siblingNames.includes(this.proposedName);
   }
 
   clicked() {
@@ -190,12 +206,7 @@ export default class SidebarItem extends Vue {
   onNameEnterDown() {
     this.proposedName = this.item.name;
     this.$emit('pathEditing', this.item.path);
-
-    Vue.nextTick().then(() => {
-      const editInput = <HTMLInputElement>this.$refs.editInput;
-      editInput.select();
-      editInput.focus();
-    });
+    this.focusInputOnNextTick();
   }
 
   onInputEnterDown() {
@@ -208,8 +219,9 @@ export default class SidebarItem extends Vue {
   }
 
   onEditInputBlur() {
-    if (this.cancelEdit) {
+    if (this.cancelEdit || this.proposedNameIsDuplicate) {
       this.cancelEdit = true;
+      this.proposedName = this.item.name;
     } else {
       this.renameItem();
     }
@@ -222,6 +234,14 @@ export default class SidebarItem extends Vue {
     await FileSystemService.renameFileOrFolder(oldPath, newPath);
     this.item.name = this.proposedName;
     this.item.path = newPath;
+  }
+
+  private focusInputOnNextTick() {
+    Vue.nextTick().then(() => {
+      const editInput = <HTMLInputElement>this.$refs.editInput;
+      editInput.select();
+      editInput.focus();
+    });
   }
 }
 </script>
