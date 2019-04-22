@@ -1,4 +1,8 @@
 {
   "editor.tabSize": 2,
-  "javascript.implicitProjectConfig.experimentalDecorators": true
+  "javascript.implicitProjectConfig.experimentalDecorators": true,
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#a5bde5",
+    "titleBar.activeForeground": "#000"
+  }
 }

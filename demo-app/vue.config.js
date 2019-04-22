@@ -1,9 +1,6 @@
 const MonocoEditorPlugin = require('monaco-editor-webpack-plugin');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 
-const v8 = require('v8');
-v8.setFlagsFromString('--max_old_space_size=8192');
-
 module.exports = {
   configureWebpack: {
     plugins: [
@@ -13,7 +10,14 @@ module.exports = {
         // Some language extensions like typescript are so huge that may impact build performance
         // e.g. Build full languages support with webpack 4.0 takes over 80 seconds
         // Languages are loaded on demand at runtime
-        // languages: [],
+        languages: [
+          'css',
+          'javascript',
+          'typescript',
+          'html',
+          'markdown',
+          'ini',
+        ],
       }),
 
       new CompressionWebpackPlugin(),
