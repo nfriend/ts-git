@@ -1,9 +1,10 @@
 const MonocoEditorPlugin = require('monaco-editor-webpack-plugin');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = {
-  configureWebpack: {
-    plugins: [
+  configureWebpack: config => {
+    config.plugins.push(
       new MonocoEditorPlugin({
         // https://github.com/Microsoft/monaco-editor-webpack-plugin#options
         // Include a subset of languages support
@@ -12,8 +13,24 @@ module.exports = {
         // Languages are loaded on demand at runtime
         // languages: [],
       }),
+    );
 
-      new CompressionWebpackPlugin(),
-    ],
+    config.plugins.push(new CompressionWebpackPlugin());
+
+    // remove the exist ForkTsCheckerWebpackPlugin
+    // so that we can replace it with our modified version
+    config.plugins = config.plugins.filter(
+      p => !(p instanceof ForkTsCheckerWebpackPlugin),
+    );
+
+    config.plugins.push(
+      new ForkTsCheckerWebpackPlugin({
+        vue: true,
+        tslint: false,
+        formatter: 'codeframe',
+        checkSyntacticErrors: false,
+        memoryLimit: 8192,
+      }),
+    );
   },
 };
