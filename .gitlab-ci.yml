@@ -16,4 +16,4 @@ pages:
   only:
     - master
   tags:
-    - local
+    - shared
