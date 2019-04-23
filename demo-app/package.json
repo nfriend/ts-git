@@ -5,7 +5,7 @@
   "description": "A demo app for ts-git, written in Vue and TypeScript",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "node --max_old_space_size=4096 node_modules/.bin/vue-cli-service build"
+    "build": "node --max_old_space_size=2048 node_modules/.bin/vue-cli-service build"
   },
   "repository": {
     "type": "git",
