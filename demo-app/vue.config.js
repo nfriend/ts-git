@@ -2,9 +2,6 @@ const MonocoEditorPlugin = require('monaco-editor-webpack-plugin');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
-const v8 = require('v8');
-v8.setFlagsFromString('--max_old_space_size=8192');
-
 module.exports = {
   configureWebpack: config => {
     config.plugins.push(
@@ -32,6 +29,8 @@ module.exports = {
         tslint: false,
         formatter: 'codeframe',
         checkSyntacticErrors: false,
+
+        // add more memory
         memoryLimit: 8192,
       }),
     );
