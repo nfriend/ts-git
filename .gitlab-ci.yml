@@ -11,6 +11,9 @@ test:
     - npm install
     - npm run build
     - npm run test
+  artifacts:
+    reports:
+      junit: lib/test-results/junitresults.xml
 
 pages:
   stage: deploy
