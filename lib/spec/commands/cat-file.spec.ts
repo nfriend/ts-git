@@ -30,6 +30,7 @@ describe(`cat-file command`, () => {
 
       await fs.mkdirAsync('/test');
       await fs.mkdirAsync(path.join('/test', '.git'));
+      await fs.mkdirAsync(path.join('/test', '.git', 'objects'));
       await fs.mkdirAsync(path.join('/test', 'subdirectory'));
       const filePath = path.join('/test', 'subdirectory', 'my-file.txt');
       await fs.appendFileAsync(filePath, gitObj.blobData);

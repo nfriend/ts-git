@@ -49,13 +49,13 @@ export const hashObjectCommand = async (
     const zippedFileContents = await gitObj.serialize();
     const gitObjFilePath = path.join(
       repoRoot,
-      '.git',
+      '.git/objects',
       gitObjDirectory,
       gitObjFilename,
     );
 
     try {
-      await fs.mkdirAsync(path.join(gitObjFilePath, '../'));
+      await fs.mkdirAsync(path.resolve(gitObjFilePath, '../'));
       await fs.appendFileAsync(gitObjFilePath, zippedFileContents);
     } catch (err) {
       return {

@@ -4,6 +4,13 @@
     "outDir": "dist",
     "declaration": true,
     "target": "es5",
-    "lib": ["dom", "es5", "scripthost", "es2015.promise", "es2015.collection"]
+    "lib": [
+      "dom",
+      "es5",
+      "scripthost",
+      "es2015.promise",
+      "es2015.collection",
+      "es2016.array.include"
+    ]
   }
 }

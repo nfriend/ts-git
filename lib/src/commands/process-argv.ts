@@ -1,6 +1,7 @@
 import { TsGit } from '../TsGit';
 import * as yargsParser from 'yargs-parser';
 import { CommandResult } from './CommandResult';
+import { GitObjectType } from '../models/GitObjectType';
 
 export const processArgvCommand = async (
   tsGit: TsGit,
@@ -19,8 +20,37 @@ export const processArgvCommand = async (
   } else if (command === 'version') {
     return await tsGit.version();
   } else if (command === 'init') {
-    const dir = argv._[2] || '/';
+    const dir = argv._[2] || '.';
     return tsGit.init(dir);
+  } else if (command === 'cat-file') {
+    const type = argv._[2];
+
+    if (!['blob', 'commit', 'tag', 'tree'].includes(type)) {
+      return Promise.resolve({
+        success: false,
+        message: `Usage: ts-git cat-file <type> <object>
+<type> can be one of: blob, tree, commit, tag`,
+      });
+    }
+
+    const object = argv._[3] || '';
+
+    return tsGit.catFile('.', <GitObjectType>type, object);
+  } else if (command === 'hash-object') {
+    const type = argv.t;
+
+    if (type && !['blob', 'commit', 'tag', 'tree'].includes(type)) {
+      return Promise.resolve({
+        success: false,
+        message: `Usage: ts-git hash-object [-t <type>] [-w] <file>
+<type> can be one of: blob, tree, commit, tag`,
+      });
+    }
+
+    const write = Boolean(argv.w);
+    const filePath = argv._[2] || '';
+
+    return tsGit.hashObject('.', filePath, write, type);
   } else {
     const success = false;
     const message = `ts-git doesn't know how to execute the "${command}" command.
@@ -44,7 +74,12 @@ Here is the complete list of commands implemented by ts-git:
 ts-git init [directory]
   Create an empty ts-git repository
   
-cat-file <type> <object>
+ts-git cat-file <type> <object>
   Provide content or type and size information
-  for repository objects`,
+  for repository objects
+  
+ts-git hash-object [-t <type>] [-w] <file>
+  Compute object ID and optionally creates 
+  a blob from a file
+`,
 };

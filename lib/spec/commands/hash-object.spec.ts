@@ -27,6 +27,7 @@ describe(`hash-object command`, () => {
 
       await fs.mkdirAsync('/test');
       await fs.mkdirAsync(path.join('/test', '.git'));
+      await fs.mkdirAsync(path.join('/test', '.git', 'objects'));
       await fs.mkdirAsync(path.join('/test', 'subdirectory'));
 
       await fs.appendFileAsync(

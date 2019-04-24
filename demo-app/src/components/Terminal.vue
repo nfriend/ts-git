@@ -45,6 +45,10 @@
         overflow-y: scroll;
       }
     }
+
+    input {
+      width: calc(100% - 20px);
+    }
   }
 
   .output {

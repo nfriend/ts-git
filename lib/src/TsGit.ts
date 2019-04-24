@@ -8,6 +8,7 @@ import { GitObjectType } from './models/GitObjectType';
 import * as nodeFsModule from 'fs';
 import { versionCommand } from './commands/version';
 import { processArgvCommand } from './commands/process-argv';
+import { hashObjectCommand } from './commands/hash-object';
 bluebird.promisifyAll(nodeFsModule);
 
 export type FileSystemType = 'InMemory' | 'LocalStorage' | 'FileSystem';
@@ -84,6 +85,28 @@ export class TsGit {
     try {
       const fs = await this.fsPromise;
       return await catFileCommand(fs, cwd, type, object);
+    } catch (err) {
+      return this.getUexpectedResult(err);
+    }
+  }
+
+  /**
+   * Equivalent to git's "hash-object" command
+   * @param cwd The current working directory
+   * @param filePath The path to a file
+   * @param write Whether or not to actually write the object
+   * to the object database
+   * @param type The object type
+   */
+  async hashObject(
+    cwd: string,
+    filePath: string,
+    write: boolean = false,
+    type: GitObjectType = 'blob',
+  ): Promise<CommandResult> {
+    try {
+      const fs = await this.fsPromise;
+      return await hashObjectCommand(fs, cwd, filePath, write, type);
     } catch (err) {
       return this.getUexpectedResult(err);
     }

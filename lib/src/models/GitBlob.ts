@@ -25,7 +25,7 @@ export class GitBlob extends GitObject {
     return await zlib.deflateAsync(this.serializeToString());
   }
 
-  private deserializePattern = /^blob ([0-9]+)\u0000(.*)$/;
+  private deserializePattern = /^blob ([0-9]+)\u0000(.*)$/s;
 
   async deserialize(fileBuffer: Buffer) {
     const fileContents = (await zlib.unzipAsync(fileBuffer)).toString();
@@ -35,7 +35,7 @@ export class GitBlob extends GitObject {
 
     if (this.getSize() != size) {
       throw new Error(
-        `Malformed object: object stating it was of size ${size}, ` +
+        `Malformed object: object stated it was of size ${size}, ` +
           `but it really is of size ${this.getSize()}`,
       );
     }

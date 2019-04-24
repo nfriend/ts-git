@@ -27,7 +27,7 @@ export const catFileCommand = async (
   let fileBuffer: Buffer;
   try {
     fileBuffer = await fs.readFileAsync(
-      path.resolve(repoRoot, '.git', objDirectory, objFilename),
+      path.resolve(repoRoot, '.git/objects', objDirectory, objFilename),
     );
   } catch (err) {
     return {
