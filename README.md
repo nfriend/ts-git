@@ -52,3 +52,5 @@ ts-git init
 ```
 
 To the see the list of available commands, run `ts-git --help`.
+
+testing
