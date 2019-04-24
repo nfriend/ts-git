@@ -3,7 +3,11 @@
     <Header class="flex-shrink-0" />
     <div class="d-flex flex-column flex-md-row flex-grow-1 min-height-0">
       <WindowChrome class="flex-even ml-3 mr-3 mb-3" :scrollable="true">
-        <Terminal @fileSystemChanged="updateFileSystem" />
+        <Terminal
+          ref="Terminal"
+          @fileSystemChanged="updateFileSystem"
+          @click.native="terminalClicked"
+        />
       </WindowChrome>
       <WindowChrome class="flex-even ml-3 ml-md-0 mr-3 mb-3">
         <FileEditor ref="FileEditor" />
@@ -30,6 +34,10 @@ import WindowChrome from '@/components/WindowChrome.vue';
 export default class Home extends Vue {
   updateFileSystem() {
     this.$refs.FileEditor.updateFileSystem();
+  }
+
+  terminalClicked() {
+    this.$refs.Terminal.focusPrompt();
   }
 }
 </script>

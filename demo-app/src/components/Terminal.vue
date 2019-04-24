@@ -86,6 +86,13 @@ export default class Terminal extends Vue {
     this.$emit('fileSystemChanged');
   }
 
+  focusPrompt() {
+    // a bit of a hack
+    (<HTMLInputElement>(
+      document.querySelector('.vue-command .term-stdin input:not([disabled])')
+    )).focus();
+  }
+
   commands = {
     'ts-git': async argv => {
       let result = await this.tsGit.processArgv(argv);
