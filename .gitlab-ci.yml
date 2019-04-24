@@ -9,6 +9,7 @@ test:
   script:
     - cd lib
     - npm install
+    - npm run build
     - npm run test
 
 pages:
