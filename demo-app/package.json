@@ -58,6 +58,7 @@
     "compression-webpack-plugin": "^2.0.0",
     "monaco-editor-webpack-plugin": "^1.7.0",
     "node-sass": "^4.9.0",
+    "raw-loader": "^2.0.0",
     "sass-loader": "^7.1.0",
     "typescript": "^3.2.1",
     "vue-template-compiler": "^2.5.21"
