@@ -71,6 +71,7 @@ export default class FileEditor extends Vue {
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S, () => {
       (<any>this).$bvToast.toast('Changes are saved automatically 😊', {
         title: 'Just a note...',
+        solid: true,
       });
     });
 
