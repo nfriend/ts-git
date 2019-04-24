@@ -49,6 +49,9 @@ describe(`cat-file command`, () => {
       data: gitObj,
     });
 
+    // testing a test failure
+    expect(1).toEqual(2);
+
     done();
   });
 });
