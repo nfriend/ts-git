@@ -2,6 +2,7 @@
   <div
     class="d-flex justify-content-center p-sm-5 flex-column flex-sm-row align-items-center mt-5 mb-5 m-sm-0"
   >
+    <MobileWarning class="d-sm-none" />
     <img
       id="ts-git-logo"
       src="../assets/ts-git.png"
@@ -19,11 +20,23 @@
       </p>
       <p class="text-secondary">
         Source:
-        <a href="https://gitlab.com/nfriend/ts-git" target="_blank">
+        <a
+          href="https://gitlab.com/nfriend/ts-git"
+          target="_blank"
+          class="mr-1"
+        >
           https://gitlab.com/nfriend/ts-git
+        </a>
+        <a href="https://gitlab.com/nfriend/ts-git/pipelines" target="_blank">
+          <img
+            src="https://gitlab.com/nfriend/ts-git/badges/master/pipeline.svg"
+            alt="GitLab build status"
+          />
         </a>
       </p>
     </div>
+
+    <GitLabCorner />
   </div>
 </template>
 
@@ -32,3 +45,18 @@
   border-radius: 6px;
 }
 </style>
+
+<script lang="ts">
+import { Component } from 'vue-property-decorator';
+import GitLabCorner from './GitLabCorner.vue';
+import MobileWarning from './MobileWarning.vue';
+import Vue from 'vue';
+
+@Component({
+  components: {
+    GitLabCorner,
+    MobileWarning,
+  },
+})
+export default class Header extends Vue {}
+</script>
