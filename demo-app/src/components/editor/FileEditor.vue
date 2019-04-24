@@ -222,7 +222,7 @@ export default class FileEditor extends Vue {
     { regex: /.html?$/i, language: 'html' },
     { regex: /.md$/i, language: 'markdown' },
     { regex: /.yml$/i, language: 'yaml' },
-    { regex: /.git\/description$/i, language: 'ini' },
+    { regex: /.git\/config$/i, language: 'ini' },
   ];
 
   private async updateEditor() {
