@@ -49,9 +49,9 @@ export const initCommand = async (
 
   const filesToCreate = {
     '.git/HEAD': 'ref: refs/heads/master\n',
-    '.git/config':
-      "Unnamed repository; edit this file 'description' to name the repository.\n",
     '.git/description':
+      "Unnamed repository; edit this file 'description' to name the repository.\n",
+    '.git/config':
       '[core]\n' +
       '\trepositoryformatversion = 0\n' +
       '\tfilemode = true\n' +
