@@ -7,7 +7,7 @@ export const demoFiles = {
     .default,
   'src/scripts/app.js': require('!!raw-loader!../../node_modules/lodash/debounce.js')
     .default,
-  'README.md': require('!!raw-loader!../../README.md').default,
+  'README.md': require('!!raw-loader!../../../README.md').default,
   '.gitlab-ci.yml': require('!!raw-loader!../../../.gitlab-ci.yml').default,
   '.prettierrc.json': JSON.stringify(
     require('../../../.prettierrc.json'),
