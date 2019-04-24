@@ -1,5 +1,16 @@
 image: node:8
 
+stages:
+  - test
+  - deploy
+
+test:
+  stage: test
+  script:
+    - cd lib
+    - npm install
+    - npm run test
+
 pages:
   stage: deploy
   script:

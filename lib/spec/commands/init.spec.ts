@@ -49,9 +49,9 @@ describe(`init command`, () => {
     ];
     const expectedFiles = {
       '/test/.git/HEAD': 'ref: refs/heads/master\n',
-      '/test/.git/config':
-        "Unnamed repository; edit this file 'description' to name the repository.\n",
       '/test/.git/description':
+        "Unnamed repository; edit this file 'description' to name the repository.\n",
+      '/test/.git/config':
         '[core]\n' +
         '\trepositoryformatversion = 0\n' +
         '\tfilemode = true\n' +
