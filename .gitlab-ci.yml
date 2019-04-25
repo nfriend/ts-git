@@ -1,15 +1,8 @@
 image: node:8
 
 stages:
-  - error
   - test
   - deploy
-
-error:
-  stage: error
-  script:
-    - echo 'Failing!'
-    - exit 1
 
 test:
   stage: test
