@@ -29,7 +29,7 @@
   },
   "homepage": "https://gitlab.com/nfriend/ts-git#readme",
   "devDependencies": {
-    "@types/jasmine": "3.4.1",
+    "@types/jasmine": "3.4.2",
     "jasmine": "3.5.0",
     "jasmine-reporters": "2.3.2",
     "nodemon": "1.19.3",
