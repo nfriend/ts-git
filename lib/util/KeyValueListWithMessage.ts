@@ -63,3 +63,20 @@ export class KeyValueListWithMessageParser {
     }
   }
 }
+
+export class KeyValueListWithMessageSerializer {
+  static serialize(kvlm: KeyValueListWithMessage): string {
+    let strs: string[] = [];
+    for (const key in kvlm) {
+      if (key !== 'message') {
+        const value = kvlm[key].replace(/\n/g, '\n ');
+        strs.push(`${key} ${value}`);
+      }
+    }
+
+    strs.push('');
+    strs.push(kvlm.message);
+
+    return strs.join('\n');
+  }
+}
