@@ -12,31 +12,54 @@ export class KeyValueListWithMessageParser {
       message: undefined,
     };
 
-    let keyMatcher = this.keyRegex.exec(input);
-
-    while (keyMatcher) {
-      const key = keyMatcher[1];
-      kvlm[key] = '';
-      input = input.replace(this.keyRegex, '');
-
-      while (!this.isEndOfValue(input)) {
-        kvlm[key] += input.charAt(0);
-        input = input.substr(1);
-      }
-
-      input = input.replace(/^\s+/m, '');
-
-      keyMatcher = this.keyRegex.exec(input);
-    }
-
-    kvlm.message = input;
-
-    return kvlm;
+    return this.parseRecurse(input, 0, kvlm);
   }
 
-  private static keyRegex = /^(\S+) /;
+  private static parseRecurse(
+    input: string,
+    startIndex: number,
+    kvlm: KeyValueListWithMessage,
+  ): KeyValueListWithMessage {
+    const firstSpaceIndex = input.indexOf(' ', startIndex);
+    const firstNewLineIndex = input.indexOf('\n', startIndex);
 
-  private static isEndOfValue(input: string): boolean {
-    return input.charAt(0) === '\n' && !/^\n+ /.test(input);
+    if (firstSpaceIndex === -1 || firstNewLineIndex < firstSpaceIndex) {
+      // There's no space, or the newline appears before the space.
+      // The rest of the input is the message.
+
+      if (firstNewLineIndex !== startIndex) {
+        throw new Error(
+          'Parse error: expected newline index to be === start index',
+        );
+      }
+
+      kvlm.message = input.substring(startIndex + 1);
+      return kvlm;
+    } else {
+      // We're reading a key/value pair.
+
+      const key = input.substring(startIndex, firstSpaceIndex);
+
+      // Find the end of the value by looping until we find
+      // a newline _not_ followed by a space
+      let valueEndIndex = startIndex;
+      while (true) {
+        valueEndIndex = input.indexOf('\n', valueEndIndex + 1);
+        if (valueEndIndex === -1) {
+          throw new Error("Parse error: couldn't find a newline");
+        }
+
+        if (input.charAt(valueEndIndex + 1) !== ' ') {
+          break;
+        }
+      }
+      const value = input
+        .substring(firstSpaceIndex + 1, valueEndIndex)
+        .replace(/\n /g, '\n');
+
+      kvlm[key] = kvlm[key] || value;
+
+      return this.parseRecurse(input, valueEndIndex + 1, kvlm);
+    }
   }
 }
