@@ -4,7 +4,6 @@ stages:
   - test and build
   - deploy
 
-# Cache npm modules in between jobs
 cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
