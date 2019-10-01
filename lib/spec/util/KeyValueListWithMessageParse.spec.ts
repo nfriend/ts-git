@@ -1,7 +1,7 @@
 import {
   KeyValueListWithMessage,
   KeyValueListWithMessageParser,
-} from '../../util/KeyValueListWithMessageParser';
+} from '../../util/KeyValueListWithMessage';
 
 describe(`KeyValueListWithMessageParse`, () => {
   beforeEach(() => {});
