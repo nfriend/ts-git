@@ -39,7 +39,7 @@
     "bootstrap": "4.3.1",
     "bootstrap-vue": "2.0.2",
     "browserfs": "1.4.3",
-    "core-js": "3.2.1",
+    "core-js": "2.6.9",
     "i": "0.3.6",
     "lodash": "4.17.15",
     "npm": "6.11.3",
