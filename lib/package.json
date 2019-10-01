@@ -46,6 +46,6 @@
     "browserfs": "^1.4.3",
     "fs-extra": "^8.0.0",
     "js-sha1": "^0.6.0",
-    "yargs-parser": "^13.0.0"
+    "yargs-parser": "^14.0.0"
   }
 }
