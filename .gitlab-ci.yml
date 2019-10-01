@@ -1,19 +1,37 @@
 image: node:12
 
 stages:
-  - test and build
+  - install
+  - build
+  - test
   - deploy
 
 cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
     - lib/node_modules/
+    - demo-app/node_modules/
 
-test lib:
-  stage: test and build
+install lib:
+  stage: install
   script:
     - cd lib
     - npm install
+
+install demo:
+  stage: install
+  script:
+    - cd demo-app
+    - npm install
+
+test lib:
+  stage: test
+  needs:
+    - install lib
+  cache:
+    policy: pull
+  script:
+    - cd lib
     - npm run test
   artifacts:
     paths:
@@ -22,17 +40,23 @@ test lib:
       junit: lib/test-report.xml
 
 build lib:
-  stage: test and build
+  stage: build
+  needs:
+    - install lib
+  cache:
+    policy: pull
   script:
     - cd lib
-    - npm install
     - npm run build
 
 build demo:
-  stage: test and build
+  stage: build
+  needs:
+    - install demo
+  cache:
+    policy: pull
   script:
     - cd demo-app
-    - npm install
     - npm run build
   artifacts:
     paths:
@@ -40,6 +64,8 @@ build demo:
 
 pages:
   stage: deploy
+  needs:
+    - build demo
   dependencies:
     - build demo
   script:
