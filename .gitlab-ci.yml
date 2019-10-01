@@ -4,11 +4,19 @@ stages:
   - test
   - deploy
 
+before_script:
+  - cd lib
+  - npm install
+
+# Cache npm modules in between jobs
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - lib/node_modules/
+
 test:
   stage: test
   script:
-    - cd lib
-    - npm install
     - npm run build
     - npm run test
   artifacts:
@@ -18,8 +26,6 @@ test:
 pages:
   stage: deploy
   script:
-    - cd lib
-    - npm install
     - npm run build
     - cd ../demo-app
     - npm install
