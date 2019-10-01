@@ -4,32 +4,36 @@ stages:
   - test and build
   - deploy
 
-before_script:
-  - cd lib
-  - npm install
-  - cd ../demo-app
-  - npm install
-  - cd ..
+# Cache npm modules in between jobs
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - lib/node_modules/
 
 test lib:
   stage: test and build
   script:
     - cd lib
+    - npm install
     - npm run test
   artifacts:
+    paths:
+      - lib/test-report.xml
     reports:
-      junit: lib/test-results/junitresults.xml
+      junit: lib/test-report.xml
 
 build lib:
   stage: test and build
   script:
     - cd lib
+    - npm install
     - npm run build
 
 build demo:
   stage: test and build
   script:
     - cd demo-app
+    - npm install
     - npm run build
   artifacts:
     paths:
