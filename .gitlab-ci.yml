@@ -1,40 +1,48 @@
-image: node:8
+image: node:12
 
 stages:
-  - test
+  - test and build
   - deploy
 
 before_script:
   - cd lib
   - npm install
+  - cd ../demo-app
+  - npm install
+  - cd ..
 
-# Cache npm modules in between jobs
-cache:
-  key: ${CI_COMMIT_REF_SLUG}
-  paths:
-    - lib/node_modules/
-
-test:
-  stage: test
+test lib:
+  stage: test and build
   script:
-    - npm run build
+    - cd lib
     - npm run test
   artifacts:
     reports:
       junit: lib/test-results/junitresults.xml
 
+build lib:
+  stage: test and build
+  script:
+    - cd lib
+    - npm run build
+
+build demo:
+  stage: test and build
+  script:
+    - cd demo-app
+    - npm run build
+  artifacts:
+    paths:
+      - dist
+
 pages:
   stage: deploy
+  dependencies:
+    - build demo
   script:
-    - npm run build
-    - cd ../demo-app
-    - npm install
-    - npm run build
     - cp -r dist ../public
   artifacts:
     paths:
       - public
   only:
     - master
-  tags:
-    - shared

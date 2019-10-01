@@ -1,2 +1,5 @@
 node_modules
 dist
+
+# Ignore test coverage reports
+test-report.xml
