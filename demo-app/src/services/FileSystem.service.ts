@@ -1,6 +1,6 @@
-import { BrowserFSService } from './BrowserFS.service';
-import * as path from 'path';
 import without from 'lodash/without';
+import * as path from 'path';
+import { BrowserFSService } from './BrowserFS.service';
 
 export interface FileSystemItem {
   name: string;
@@ -117,42 +117,6 @@ export class FileSystemService {
   }
 
   /**
-   * Creates a new file or folder with a unique name
-   * in the provided directory.  Returns the name
-   * of the newly created item.
-   * @param parentFolder The folder to create the new item in
-   * @param type The type of item to create (file or folder)
-   */
-  private static async createNewItem(
-    parentFolder: string,
-    type: 'file' | 'folder',
-  ): Promise<string> {
-    const fs = await BrowserFSService.fsPromise;
-
-    const contents: string[] = (await fs.readdirAsync(parentFolder)).map(i =>
-      i.toLowerCase(),
-    );
-
-    let newItemName = type === 'folder' ? 'new-folder' : 'new-file';
-    let counter = 0;
-    while (contents.includes(newItemName)) {
-      counter++;
-      newItemName =
-        type === 'folder' ? `new-folder-${counter}` : `new-file-${counter}`;
-    }
-
-    const newPath = path.join(parentFolder, newItemName);
-
-    if (type === 'folder') {
-      await fs.mkdirAsync(newPath);
-    } else {
-      await fs.writeFileAsync(newPath, '');
-    }
-
-    return newPath;
-  }
-
-  /**
    * Deletes a file or a folder
    * @param fileOrFolderPath The file or folder to delete
    */
@@ -216,6 +180,42 @@ export class FileSystemService {
     const fs = await BrowserFSService.fsPromise;
 
     await fs.writeFileAsync(filePath, fileContents);
+  }
+
+  /**
+   * Creates a new file or folder with a unique name
+   * in the provided directory.  Returns the name
+   * of the newly created item.
+   * @param parentFolder The folder to create the new item in
+   * @param type The type of item to create (file or folder)
+   */
+  private static async createNewItem(
+    parentFolder: string,
+    type: 'file' | 'folder',
+  ): Promise<string> {
+    const fs = await BrowserFSService.fsPromise;
+
+    const contents: string[] = (await fs.readdirAsync(parentFolder)).map(i =>
+      i.toLowerCase(),
+    );
+
+    let newItemName = type === 'folder' ? 'new-folder' : 'new-file';
+    let counter = 0;
+    while (contents.includes(newItemName)) {
+      counter++;
+      newItemName =
+        type === 'folder' ? `new-folder-${counter}` : `new-file-${counter}`;
+    }
+
+    const newPath = path.join(parentFolder, newItemName);
+
+    if (type === 'folder') {
+      await fs.mkdirAsync(newPath);
+    } else {
+      await fs.writeFileAsync(newPath, '');
+    }
+
+    return newPath;
   }
 
   private static async getDirectoryContentsRecurse(

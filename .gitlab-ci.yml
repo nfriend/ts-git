@@ -78,6 +78,13 @@ lint lib:
     - cd lib
     - npm run lint
 
+lint demo:
+  <<: *read-cache
+  stage: test and lint
+  script:
+    - cd demo-app
+    - npm run lint
+
 pages:
   stage: deploy
   dependencies:

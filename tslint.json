@@ -12,7 +12,8 @@
     "interface-name": [true, "never-prefix"],
     "no-var-requires": false,
     "forin": false,
-    "max-classes-per-file": false
+    "max-classes-per-file": false,
+    "no-trailing-whitespace": [true, "ignore-template-strings"]
   },
   "rulesDirectory": []
 }

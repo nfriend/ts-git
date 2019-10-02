@@ -1,12 +1,9 @@
-import { BrowserFSService } from './BrowserFS.service';
 import * as path from 'path';
-import { demoFiles, demoDirs } from './demo-files';
-import { FileSystemService, FileSystemItem } from './FileSystem.service';
+import { BrowserFSService } from './BrowserFS.service';
+import { demoDirs, demoFiles } from './demo-files';
+import { FileSystemItem, FileSystemService } from './FileSystem.service';
 
 export class LocalStorageService {
-  private static INIT_KEY: string = 'ts-git:has-demo-been-initialized';
-  private static FOLDER_STATE_KEY: string = 'ts-git:folder-state';
-
   /**
    * Resets the file system to the "demo" state
    * @param fs The fs module to use to create the filesystem
@@ -62,4 +59,6 @@ export class LocalStorageService {
       JSON.stringify(collapsedFolders),
     );
   }
+  private static INIT_KEY: string = 'ts-git:has-demo-been-initialized';
+  private static FOLDER_STATE_KEY: string = 'ts-git:folder-state';
 }

@@ -5,7 +5,13 @@
   "description": "A demo app for ts-git, written in Vue and TypeScript",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "node --max_old_space_size=2048 node_modules/.bin/vue-cli-service build"
+    "build": "node --max_old_space_size=2048 node_modules/.bin/vue-cli-service build",
+    "tslint": "tslint -c ../tslint.json -p .",
+    "tslint-fix": "tslint -c ../tslint.json -p . --fix",
+    "prettier": "prettier --check '**/*.ts'",
+    "prettier-fix": "prettier --write '**/*.ts'",
+    "lint": "npm run prettier; npm run tslint",
+    "lint-fix": "npm run prettier-fix; npm run tslint-fix"
   },
   "repository": {
     "type": "git",
@@ -58,8 +64,10 @@
     "compression-webpack-plugin": "3.0.0",
     "monaco-editor-webpack-plugin": "1.7.0",
     "node-sass": "4.12.0",
+    "prettier": "^1.18.2",
     "raw-loader": "3.1.0",
     "sass-loader": "8.0.0",
+    "tslint": "^5.20.0",
     "typescript": "3.6.3",
     "vue-template-compiler": "2.6.10"
   }
