@@ -12,22 +12,16 @@ cache:
     - lib/node_modules/
     - demo-app/node_modules/
 
-install lib:
+install:
   stage: install
   script:
     - cd lib
     - npm install
-
-install demo:
-  stage: install
-  script:
-    - cd demo-app
+    - cd ../demo-app
     - npm install
 
 test lib:
   stage: test
-  needs:
-    - install lib
   script:
     - cd lib
     - npm run test
@@ -39,16 +33,12 @@ test lib:
 
 build lib:
   stage: build
-  needs:
-    - install lib
   script:
     - cd lib
     - npm run build
 
 build demo:
   stage: build
-  needs:
-    - install demo
   script:
     - cd demo-app
     - npm run build
