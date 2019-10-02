@@ -8,16 +8,19 @@ stages:
   - test
   - deploy
 
+.cache-config: &cache-config
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - lib/node_modules/
+    - demo-app/node_modules/
+
 .write-cache: &write-cache
   cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - lib/node_modules/
-      - demo-app/node_modules/
+    <<: *cache-config
 
 .read-cache: &read-cache
-  <<: *write-cache
   cache:
+    <<: *cache-config
     policy: pull
 
 install lib:
