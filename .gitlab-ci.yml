@@ -28,8 +28,6 @@ test lib:
   stage: test
   needs:
     - install lib
-  cache:
-    policy: pull
   script:
     - cd lib
     - npm run test
@@ -43,8 +41,6 @@ build lib:
   stage: build
   needs:
     - install lib
-  cache:
-    policy: pull
   script:
     - cd lib
     - npm run build
@@ -53,8 +49,6 @@ build demo:
   stage: build
   needs:
     - install demo
-  cache:
-    policy: pull
   script:
     - cd demo-app
     - npm run build
@@ -64,8 +58,6 @@ build demo:
 
 pages:
   stage: deploy
-  needs:
-    - build demo
   dependencies:
     - build demo
   script:
