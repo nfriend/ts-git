@@ -1,8 +1,10 @@
 image: node:12
 
 stages:
-  - install
-  - build
+  - install lib
+  - build lib
+  - install demo
+  - build demo
   - test
   - deploy
 
@@ -12,13 +14,37 @@ cache:
     - lib/node_modules/
     - demo-app/node_modules/
 
-install:
-  stage: install
+install lib:
+  stage: install lib
   script:
     - cd lib
     - npm install
-    - cd ../demo-app
+
+build lib:
+  stage: build lib
+  script:
+    - cd lib
+    - npm run build
+  artifacts:
+    paths:
+      - lib/dist/
+
+install demo:
+  stage: install demo
+  script:
+    - cd demo-app
     - npm install
+  dependencies:
+    - build lib
+
+build demo:
+  stage: build demo
+  script:
+    - cd demo-app
+    - npm run build
+  artifacts:
+    paths:
+      - demo-app/dist/
 
 test lib:
   stage: test
@@ -30,21 +56,6 @@ test lib:
       - lib/test-report.xml
     reports:
       junit: lib/test-report.xml
-
-build lib:
-  stage: build
-  script:
-    - cd lib
-    - npm run build
-
-build demo:
-  stage: build
-  script:
-    - cd demo-app
-    - npm run build
-  artifacts:
-    paths:
-      - dist
 
 pages:
   stage: deploy
