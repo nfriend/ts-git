@@ -25,6 +25,8 @@ build lib:
   script:
     - cd lib
     - npm run build
+  cache:
+    policy: pull
   artifacts:
     paths:
       - lib/dist/
@@ -42,6 +44,8 @@ build demo:
   script:
     - cd demo-app
     - npm run build
+  cache:
+    policy: pull
   artifacts:
     paths:
       - demo-app/dist/
@@ -51,6 +55,8 @@ test lib:
   script:
     - cd lib
     - npm run test
+  cache:
+    policy: pull
   artifacts:
     paths:
       - lib/test-report.xml
@@ -62,7 +68,9 @@ pages:
   dependencies:
     - build demo
   script:
-    - cp -r dist ../public
+    - cp -r demo-app/dist public
+  cache:
+    policy: pull
   artifacts:
     paths:
       - public
