@@ -66,7 +66,7 @@ export class KeyValueListWithMessageParser {
 
 export class KeyValueListWithMessageSerializer {
   static serialize(kvlm: KeyValueListWithMessage): string {
-    let strs: string[] = [];
+    const strs: string[] = [];
     for (const key in kvlm) {
       if (key !== 'message') {
         const value = kvlm[key].replace(/\n/g, '\n ');

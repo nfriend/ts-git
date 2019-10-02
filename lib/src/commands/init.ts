@@ -1,6 +1,6 @@
+import Stats from 'browserfs/dist/node/core/node_fs_stats';
 import * as path from 'path';
 import { CommandResult } from './CommandResult';
-import Stats from 'browserfs/dist/node/core/node_fs_stats';
 
 export const initCommand = async (
   fs: any,
@@ -23,11 +23,13 @@ export const initCommand = async (
   }
 
   // Test if we're already in the root of an existing git repo.
-  let isInRootOfGitRepo = false;
+  let isInRootOfGitRepo: boolean;
   try {
     const stats: Stats = await fs.statAsync(gitDir);
     isInRootOfGitRepo = stats.isDirectory();
-  } catch (err) {}
+  } catch (err) {
+    isInRootOfGitRepo = false;
+  }
 
   // If we're already in a repo, don't do anything
   if (isInRootOfGitRepo) {

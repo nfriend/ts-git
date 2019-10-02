@@ -1,11 +1,11 @@
-import { Logger } from '../../util/Logger';
-import * as browserfs from 'browserfs';
 import * as bluebird from 'bluebird';
+import * as browserfs from 'browserfs';
 import * as sha1 from 'js-sha1';
 import * as path from 'path';
 import { catFileCommand } from '../../src/commands/cat-file';
 import { hashObjectCommand } from '../../src/commands/hash-object';
 import { GitBlob } from '../../src/models/GitBlob';
+import { Logger } from '../../util/Logger';
 
 describe(`cat-file command`, () => {
   let fs: any;

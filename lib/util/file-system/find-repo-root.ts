@@ -13,11 +13,13 @@ export const findRepoRoot = async (
   fs: any,
   cwd: string,
 ): Promise<string | undefined> => {
-  let gitDirExists = false;
+  let gitDirExists: boolean;
   try {
     const stats: Stats = await fs.lstatAsync(path.resolve(cwd, '.git'));
     gitDirExists = stats.isDirectory();
-  } catch (err) {}
+  } catch (err) {
+    gitDirExists = false;
+  }
 
   if (gitDirExists) {
     return cwd;

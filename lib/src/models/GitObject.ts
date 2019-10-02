@@ -1,8 +1,6 @@
 import { GitObjectType } from './GitObjectType';
 
 export abstract class GitObject {
-  constructor() {}
-
   /** The type of this git object */
   abstract type: GitObjectType;
 

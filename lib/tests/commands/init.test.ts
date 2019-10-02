@@ -1,7 +1,7 @@
-import * as browserfs from 'browserfs';
 import * as bluebird from 'bluebird';
-import { initCommand } from '../../src/commands/init';
+import * as browserfs from 'browserfs';
 import Stats from 'browserfs/dist/node/core/node_fs_stats';
+import { initCommand } from '../../src/commands/init';
 import { Logger } from '../../util/Logger';
 
 describe(`init command`, () => {

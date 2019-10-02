@@ -1,5 +1,5 @@
-import * as browserfs from 'browserfs';
 import * as bluebird from 'bluebird';
+import * as browserfs from 'browserfs';
 import { findRepoRoot } from '../../../util/file-system/find-repo-root';
 
 describe(`findRepoRoot`, () => {

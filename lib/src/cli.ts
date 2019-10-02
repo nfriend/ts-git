@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import * as yargsParser from 'yargs-parser';
 import chalk from 'chalk';
+import * as yargsParser from 'yargs-parser';
 import { TsGit } from './TsGit';
 
 const argv = yargsParser(process.argv.slice(1));

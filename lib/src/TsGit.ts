@@ -1,14 +1,14 @@
-import * as browserfs from 'browserfs';
 import * as bluebird from 'bluebird';
-import * as yargsParser from 'yargs-parser';
-import { initCommand } from './commands/init';
-import { CommandResult } from './commands/CommandResult';
-import { catFileCommand } from './commands/cat-file';
-import { GitObjectType } from './models/GitObjectType';
+import * as browserfs from 'browserfs';
 import * as nodeFsModule from 'fs';
-import { versionCommand } from './commands/version';
-import { processArgvCommand } from './commands/process-argv';
+import * as yargsParser from 'yargs-parser';
+import { catFileCommand } from './commands/cat-file';
+import { CommandResult } from './commands/CommandResult';
 import { hashObjectCommand } from './commands/hash-object';
+import { initCommand } from './commands/init';
+import { processArgvCommand } from './commands/process-argv';
+import { versionCommand } from './commands/version';
+import { GitObjectType } from './models/GitObjectType';
 bluebird.promisifyAll(nodeFsModule);
 
 export type FileSystemType = 'InMemory' | 'LocalStorage' | 'FileSystem';
@@ -47,13 +47,6 @@ export class TsGit {
         );
       }
     });
-  }
-
-  private getUexpectedResult(err): CommandResult {
-    return {
-      success: false,
-      message: `An unexpected error occurred!\n${err}`,
-    };
   }
 
   // Commands
@@ -126,5 +119,12 @@ export class TsGit {
     } catch (err) {
       return this.getUexpectedResult(err);
     }
+  }
+
+  private getUexpectedResult(err): CommandResult {
+    return {
+      success: false,
+      message: `An unexpected error occurred!\n${err}`,
+    };
   }
 }

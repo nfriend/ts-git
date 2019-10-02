@@ -1,9 +1,9 @@
-import { Logger } from '../../util/Logger';
-import * as browserfs from 'browserfs';
 import * as bluebird from 'bluebird';
+import * as browserfs from 'browserfs';
 import * as path from 'path';
-import { hashObjectCommand } from '../../src/commands/hash-object';
 import { catFileCommand } from '../../src/commands/cat-file';
+import { hashObjectCommand } from '../../src/commands/hash-object';
+import { Logger } from '../../util/Logger';
 
 const zlib = require('zlib');
 bluebird.promisifyAll(zlib);

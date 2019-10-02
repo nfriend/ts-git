@@ -1,7 +1,7 @@
-import { TsGit } from '../TsGit';
 import * as yargsParser from 'yargs-parser';
-import { CommandResult } from './CommandResult';
 import { GitObjectType } from '../models/GitObjectType';
+import { TsGit } from '../TsGit';
+import { CommandResult } from './CommandResult';
 
 export const processArgvCommand = async (
   tsGit: TsGit,
@@ -35,7 +35,7 @@ export const processArgvCommand = async (
 
     const object = argv._[3] || '';
 
-    return tsGit.catFile('.', <GitObjectType>type, object);
+    return tsGit.catFile('.', type as GitObjectType, object);
   } else if (command === 'hash-object') {
     const type = argv.t;
 
@@ -73,13 +73,13 @@ Here is the complete list of commands implemented by ts-git:
 
 ts-git init [directory]
   Create an empty ts-git repository
-  
+
 ts-git cat-file <type> <object>
   Provide content or type and size information
   for repository objects
-  
+
 ts-git hash-object [-t <type>] [-w] <file>
-  Compute object ID and optionally creates 
+  Compute object ID and optionally creates
   a blob from a file
 `,
 };

@@ -1,9 +1,9 @@
-import { Logger } from '../../util/Logger';
-import * as path from 'path';
-import * as browserfs from 'browserfs';
 import * as bluebird from 'bluebird';
-import { catFileCommand } from '../../src/commands/cat-file';
+import * as browserfs from 'browserfs';
+import * as path from 'path';
 import { CommandResult } from '../../src';
+import { catFileCommand } from '../../src/commands/cat-file';
+import { Logger } from '../../util/Logger';
 
 describe(`all commands`, () => {
   let fs: any;

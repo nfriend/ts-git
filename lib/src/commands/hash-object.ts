@@ -1,11 +1,11 @@
-import * as path from 'path';
 import * as bluebird from 'bluebird';
+import * as path from 'path';
+import { findRepoRoot } from '../../util/file-system/find-repo-root';
+import { GitBlob } from '../models/GitBlob';
+import { GitObject } from '../models/GitObject';
 import { GitObjectType } from '../models/GitObjectType';
 import { CommandResult } from './CommandResult';
-import { findRepoRoot } from '../../util/file-system/find-repo-root';
 import { notAGitRepoResult } from './shared/not-a-git-repo-result';
-import { GitObject } from '../models/GitObject';
-import { GitBlob } from '../models/GitBlob';
 
 const zlib = require('zlib');
 bluebird.promisifyAll(zlib);

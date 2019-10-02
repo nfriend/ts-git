@@ -5,7 +5,7 @@ stages:
   - build lib
   - install demo
   - build demo
-  - test
+  - test and lint
   - deploy
 
 .cache-config: &cache-config
@@ -61,7 +61,7 @@ build demo:
 
 test lib:
   <<: *read-cache
-  stage: test
+  stage: test and lint
   script:
     - cd lib
     - npm run test
@@ -70,6 +70,13 @@ test lib:
       - lib/test-report.xml
     reports:
       junit: lib/test-report.xml
+
+lint lib:
+  <<: *read-cache
+  stage: test and lint
+  script:
+    - cd lib
+    - npm run lint
 
 pages:
   stage: deploy
