@@ -88,6 +88,9 @@ lint demo:
     - cd demo-app
     - npm run lint
 
+dependency_scanning:
+  stage: test and lint
+
 pages:
   stage: deploy
   dependencies:
