@@ -49,8 +49,6 @@ install demo:
   script:
     - cd demo-app
     - npm install
-  dependencies:
-    - build lib
 
 build demo:
   <<: *read-cache
@@ -84,22 +82,16 @@ lint lib:
 lint demo:
   <<: *read-cache
   stage: test and lint
-  dependencies:
-    - build lib
   script:
     - cd demo-app
     - npm run lint
 
 dependency_scanning:
   <<: *read-cache
-  dependencies:
-    - build lib
   stage: test and lint
 
 pages:
   stage: deploy
-  dependencies:
-    - build demo
   script:
     - cp -r demo-app/dist public
   artifacts:
