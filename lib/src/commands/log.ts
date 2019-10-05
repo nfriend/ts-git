@@ -4,16 +4,12 @@ import { catFileCommand } from './cat-file';
 import { CommandResult } from './CommandResult';
 import { notAGitRepoResult } from './shared/not-a-git-repo-result';
 
-export const logCommand = async (
+const logRecurse = async (
   fs: any,
   cwd: string,
   commitName: string,
+  messages: string[],
 ): Promise<CommandResult> => {
-  const repoRoot = await findRepoRoot(fs, cwd);
-  if (!repoRoot) {
-    return notAGitRepoResult;
-  }
-
   const catFileResult = await catFileCommand(fs, cwd, 'commit', commitName);
   if (!catFileResult.success) {
     return catFileResult;
@@ -21,7 +17,6 @@ export const logCommand = async (
 
   const commit = catFileResult.data as GitCommit;
 
-  const messages = [];
   messages.push(`commit ${commit.getSha1()}`);
   messages.push(`Author: ${commit.author}`);
   if (commit.authorTimestamp) {
@@ -35,8 +30,26 @@ export const logCommand = async (
       .join('\n'),
   );
 
-  return {
-    success: true,
-    message: messages.join('\n'),
-  };
+  if (commit.parent) {
+    messages.push('');
+    return logRecurse(fs, cwd, commit.parent, messages);
+  } else {
+    return {
+      success: true,
+      message: messages.join('\n'),
+    };
+  }
+};
+
+export const logCommand = async (
+  fs: any,
+  cwd: string,
+  commitName: string,
+): Promise<CommandResult> => {
+  const repoRoot = await findRepoRoot(fs, cwd);
+  if (!repoRoot) {
+    return notAGitRepoResult;
+  }
+
+  return logRecurse(fs, cwd, commitName, []);
 };
