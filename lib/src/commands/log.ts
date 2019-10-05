@@ -20,7 +20,9 @@ const logRecurse = async (
   messages.push(`commit ${commit.getSha1()}`);
   messages.push(`Author: ${commit.author}`);
   if (commit.authorTimestamp) {
-    messages.push(`Date:   ${commit.authorTimestamp}`);
+    messages.push(
+      `Date:   ${commit.authorTimestamp.format('ddd MMM DD HH:mm:ss Y ZZ')}`,
+    );
   }
   messages.push('');
   messages.push(

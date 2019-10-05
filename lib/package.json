@@ -1,6 +1,6 @@
 {
   "name": "@nathanfriend/ts-git",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A naïve implementation of git, written in TypeScript. Built to help me understand how git works under the hood.",
   "main": "dist/src/index.js",
   "bin": {
@@ -9,7 +9,7 @@
   "types": "dist/src/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "watch": "tsc --watch",
+    "build-watch": "tsc --watch",
     "test": "jest",
     "test-watch": "jest --watch",
     "tslint": "tslint -c ../tslint.json -p .",

@@ -1,14 +1,11 @@
-import * as bluebird from 'bluebird';
 import * as path from 'path';
 import { findRepoRoot } from '../../util/file-system/find-repo-root';
 import { GitBlob } from '../models/GitBlob';
+import { GitCommit } from '../models/GitCommit';
 import { GitObject } from '../models/GitObject';
 import { GitObjectType } from '../models/GitObjectType';
 import { CommandResult } from './CommandResult';
 import { notAGitRepoResult } from './shared/not-a-git-repo-result';
-
-const zlib = require('zlib');
-bluebird.promisifyAll(zlib);
 
 export const hashObjectCommand = async (
   fs: any,
@@ -34,12 +31,14 @@ export const hashObjectCommand = async (
 
   let gitObj: GitObject;
   if (type === 'blob') {
-    const blob = new GitBlob();
-    blob.blobData = fileBuffer.toString();
-    gitObj = blob;
+    gitObj = new GitBlob();
+  } else if (type === 'commit') {
+    gitObj = new GitCommit();
   } else {
     throw new Error(`type ${type} is not yet implemented`);
   }
+
+  gitObj.contents = fileBuffer.toString();
 
   if (write) {
     const sha1 = gitObj.getSha1();

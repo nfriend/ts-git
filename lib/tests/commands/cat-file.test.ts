@@ -17,7 +17,7 @@ describe(`cat-file command`, () => {
 
   beforeEach(done => {
     gitObj = new GitBlob();
-    gitObj.blobData = 'This is a test git file';
+    gitObj.contents = 'This is a test git file';
 
     browserfs.configure({ fs: 'InMemory', options: {} }, async err => {
       if (err) {
@@ -33,7 +33,7 @@ describe(`cat-file command`, () => {
       await fs.mkdirAsync(path.join('/test', '.git', 'objects'));
       await fs.mkdirAsync(path.join('/test', 'subdirectory'));
       const filePath = path.join('/test', 'subdirectory', 'my-file.txt');
-      await fs.appendFileAsync(filePath, gitObj.blobData);
+      await fs.appendFileAsync(filePath, gitObj.contents);
       await hashObjectCommand(fs, '/test', filePath, true, 'blob');
 
       done();
@@ -45,7 +45,7 @@ describe(`cat-file command`, () => {
 
     expect(result).toEqual({
       success: true,
-      message: gitObj.blobData,
+      message: gitObj.contents,
       data: gitObj,
     });
 

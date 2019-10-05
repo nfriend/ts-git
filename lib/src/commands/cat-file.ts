@@ -58,7 +58,7 @@ export const catFileCommand = async (
 
   return {
     success: true,
-    message: gitObj.getContents(),
+    message: gitObj.contents,
     data: gitObj,
   };
 };
