@@ -6,6 +6,7 @@ import { catFileCommand } from './commands/cat-file';
 import { CommandResult } from './commands/CommandResult';
 import { hashObjectCommand } from './commands/hash-object';
 import { initCommand } from './commands/init';
+import { logCommand } from './commands/log';
 import { processArgvCommand } from './commands/process-argv';
 import { versionCommand } from './commands/version';
 import { GitObjectType } from './models/GitObjectType';
@@ -100,6 +101,20 @@ export class TsGit {
     try {
       const fs = await this.fsPromise;
       return await hashObjectCommand(fs, cwd, filePath, write, type);
+    } catch (err) {
+      return this.getUexpectedResult(err);
+    }
+  }
+
+  /**
+   * A very simplified equivalent to git's "log" command
+   * @param cwd The current working directory
+   * @param commit The name of the commit to begin logging
+   */
+  async log(cwd: string, commit: string): Promise<CommandResult> {
+    try {
+      const fs = await this.fsPromise;
+      return await logCommand(fs, cwd, commit);
     } catch (err) {
       return this.getUexpectedResult(err);
     }

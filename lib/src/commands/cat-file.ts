@@ -2,6 +2,7 @@ import * as bluebird from 'bluebird';
 import * as path from 'path';
 import { findRepoRoot } from '../../util/file-system/find-repo-root';
 import { GitBlob } from '../models/GitBlob';
+import { GitCommit } from '../models/GitCommit';
 import { GitObject } from '../models/GitObject';
 import { GitObjectType } from '../models/GitObjectType';
 import { CommandResult } from './CommandResult';
@@ -39,6 +40,8 @@ export const catFileCommand = async (
   let gitObj: GitObject;
   if (type === 'blob') {
     gitObj = new GitBlob();
+  } else if (type === 'commit') {
+    gitObj = new GitCommit();
   } else {
     throw new Error(`type ${type} is not yet implemented`);
   }

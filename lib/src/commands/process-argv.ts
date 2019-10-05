@@ -51,6 +51,8 @@ export const processArgvCommand = async (
     const filePath = argv._[2] || '';
 
     return tsGit.hashObject('.', filePath, write, type);
+  } else if (command === 'log') {
+    return tsGit.log('.', argv._[2]);
   } else {
     const success = false;
     const message = `ts-git doesn't know how to execute the "${command}" command.
@@ -73,6 +75,9 @@ Here is the complete list of commands implemented by ts-git:
 
 ts-git init [directory]
   Create an empty ts-git repository
+
+ts-git log <object>
+  Shows the commit logs
 
 ts-git cat-file <type> <object>
   Provide content or type and size information
