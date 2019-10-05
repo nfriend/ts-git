@@ -1,6 +1,6 @@
 {
   "name": "@nathanfriend/ts-git",
-  "version": "0.1.4",
+  "version": "0.2.4",
   "description": "A naïve implementation of git, written in TypeScript. Built to help me understand how git works under the hood.",
   "main": "dist/src/index.js",
   "bin": {
