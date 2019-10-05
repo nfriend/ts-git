@@ -86,9 +86,9 @@ lint demo:
     - cd demo-app
     - npm run lint
 
-dependency_scanning:
-  <<: *read-cache
-  stage: test and lint
+# dependency_scanning:
+#   <<: *read-cache
+#   stage: test and lint
 
 pages:
   stage: deploy
