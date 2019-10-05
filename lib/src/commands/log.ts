@@ -31,7 +31,6 @@ const logRecurse = async (
   );
 
   if (commit.parent) {
-    messages.push('');
     return logRecurse(fs, cwd, commit.parent, messages);
   } else {
     return {
