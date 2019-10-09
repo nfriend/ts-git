@@ -91,6 +91,11 @@ dependency_scanning:
   stage: test and lint
   dependencies:
     - build lib
+  before_script:
+    - cd lib
+    - npm install
+    - cd ../demo-app
+    - npm install
 
 pages:
   stage: deploy
