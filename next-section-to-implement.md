@@ -1,3 +1,3 @@
 ### Next section to implement
 
-[Section 5.2: The Commit object](https://wyag.thb.lt/#orgd3c360a)
+[Section 6.2: Parsing trees](https://wyag.thb.lt/#orga708f5f)
