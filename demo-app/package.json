@@ -38,7 +38,7 @@
     "@nathanfriend/ts-git": "file:../lib",
     "@types/dropboxjs": "0.0.29",
     "@types/filesystem": "0.0.29",
-    "@types/fs-extra": "8.0.0",
+    "@types/fs-extra": "8.0.1",
     "@types/lodash": "4.14.144",
     "@types/node": "7.10.7",
     "@types/yargs-parser": "13.1.0",
