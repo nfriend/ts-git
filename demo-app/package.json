@@ -51,7 +51,7 @@
     "npm": "6.13.6",
     "vue": "2.6.11",
     "vue-class-component": "7.2.1",
-    "vue-command": "7.0.7",
+    "vue-command": "7.1.4",
     "vue-monaco": "1.1.0",
     "vue-property-decorator": "8.3.0",
     "vue-router": "3.1.3",
