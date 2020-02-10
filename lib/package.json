@@ -58,6 +58,6 @@
     "fs-extra": "^8.0.0",
     "js-sha1": "^0.6.0",
     "moment": "^2.24.0",
-    "yargs-parser": "^16.0.0"
+    "yargs-parser": "^17.0.0"
   }
 }
