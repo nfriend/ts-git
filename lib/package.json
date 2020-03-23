@@ -52,7 +52,7 @@
     "@types/filesystem": "0.0.29",
     "@types/fs-extra": "^8.0.0",
     "@types/node": "~7.10.0",
-    "@types/yargs-parser": "^13.0.0",
+    "@types/yargs-parser": "^15.0.0",
     "bluebird": "^3.5.4",
     "browserfs": "^1.4.3",
     "fs-extra": "^9.0.0",
