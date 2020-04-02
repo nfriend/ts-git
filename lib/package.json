@@ -38,7 +38,7 @@
     "@types/jest": "24.9.1",
     "jasmine": "3.5.0",
     "jasmine-reporters": "2.3.2",
-    "jest": "25.2.4",
+    "jest": "25.2.6",
     "jest-junit-reporter": "1.1.0",
     "nodemon": "2.0.2",
     "prettier": "2.0.2",
