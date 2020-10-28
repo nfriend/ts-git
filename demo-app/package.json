@@ -40,7 +40,7 @@
     "@types/filesystem": "0.0.29",
     "@types/fs-extra": "8.1.0",
     "@types/lodash": "4.14.150",
-    "@types/node": "7.10.10",
+    "@types/node": "7.10.14",
     "@types/yargs-parser": "15.0.0",
     "bootstrap": "4.4.1",
     "bootstrap-vue": "2.13.0",
