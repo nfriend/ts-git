@@ -35,7 +35,7 @@
   },
   "homepage": "https://gitlab.com/nfriend/ts-git#readme",
   "devDependencies": {
-    "@types/jest": "24.9.1",
+    "@types/jest": "26.0.15",
     "jasmine": "3.5.0",
     "jasmine-reporters": "2.3.2",
     "jest": "25.5.0",
